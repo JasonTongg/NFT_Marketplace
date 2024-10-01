@@ -9,7 +9,7 @@ export const metadata = {
 export default function Default({ children }) {
   return (
     <html lang="en">
-      <body className="bg-[#FFF2D8] w-full min-h-screen">
+      <body className="bg-[#181C14] w-full min-h-screen text-[#ECDFCC]">
         {children}
         <Footer />
       </body>

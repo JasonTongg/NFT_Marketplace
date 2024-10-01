@@ -11,10 +11,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import Hero from "../components/hero";
-import HowToBuy from "../components/howToBuy";
-import HomeNftDetail from "../components/homeNftDetail";
-import HomeNftDetails from "../components/homeNftDetail";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -187,16 +183,14 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-16">
-      {/* <ToastContainer /> */}
+    <div>
+      <ToastContainer />
       <Navbar
         address={address}
         isConnected={isConnected}
         connectWallet={connectEthereumWallet}
       />
-      <Hero />
-      <HowToBuy />
-      <HomeNftDetails />
+      Home
     </div>
   );
 }

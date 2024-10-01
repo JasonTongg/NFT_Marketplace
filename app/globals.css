@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hover-effect {
+  transition: all 0.5s ease-out;
+}
+
+.hover-effect:hover {
+  color: #181c14;
+  background-color: #ecdfcc;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  border-radius: 10px;
+}
+
+.hover-button {
+  transition: all 0.3s ease-out;
+  border: 2px solid #ecdfcc;
+  border-radius: 20px;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.hover-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 3px 0px #ecdfcc;
+}
+
+.hover-button:active {
+  transform: translateY(-3px);
+  box-shadow: 3px 2px 0px #ecdfcc;
+}
