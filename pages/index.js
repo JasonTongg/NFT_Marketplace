@@ -13,8 +13,9 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import Hero from "../components/hero";
 import HowToBuy from "../components/howToBuy";
-import HomeNftDetail from "../components/homeNftDetail";
 import HomeNftDetails from "../components/homeNftDetail";
+import TopCreator from "../components/topCreator";
+import FeaturedNft from "../components/featuredNft";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -197,6 +198,8 @@ export default function index() {
       <Hero />
       <HowToBuy />
       <HomeNftDetails />
+      <TopCreator />
+      <FeaturedNft />
     </div>
   );
 }

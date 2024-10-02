@@ -33,3 +33,7 @@
   transform: translateY(-3px);
   box-shadow: 3px 2px 0px #ecdfcc;
 }
+
+.creator-nft {
+  background-image: url("../public/NFT1.png");
+}
