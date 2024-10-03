@@ -196,6 +196,7 @@ export default function index() {
         address={address}
         isConnected={isConnected}
         connectWallet={connectEthereumWallet}
+        openAddress={openModal}
       />
       <Hero />
       <HowToBuy />

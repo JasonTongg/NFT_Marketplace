@@ -37,3 +37,28 @@
 .creator-nft {
   background-image: url("../public/NFT1.png");
 }
+
+.removeScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.removeScroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+html::-webkit-scrollbar-track {
+  background: #181c14;
+}
+
+/* Handle */
+html::-webkit-scrollbar-thumb {
+  background: #ecdfcc;
+  border-radius: 100px;
+}

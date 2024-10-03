@@ -16,7 +16,12 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function navbar({ address, isConnected, connectWallet }) {
+export default function navbar({
+  address,
+  isConnected,
+  connectWallet,
+  openAddress,
+}) {
   return (
     <div className="w-full py-4 flex items-center justify-between gap-4">
       <Link href="/">
@@ -61,7 +66,9 @@ export default function navbar({ address, isConnected, connectWallet }) {
         </HtmlTooltip>
         <button className="hover-effect">Create</button>
         {isConnected ? (
-          <span>{address}</span>
+          <button onClick={openAddress} className="hover-button">
+            {address.substring(0, 5)}...{address.substr(-5)}
+          </button>
         ) : (
           <button onClick={connectWallet} className="hover-button">
             Connect Wallet
