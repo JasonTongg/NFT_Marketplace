@@ -11,6 +11,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import AboutHero from "../components/aboutHero";
+import AboutFounder from "../components/aboutFounder";
+import AboutFact from "../components/aboutFact";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -191,7 +194,9 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <AboutHero />
+      <AboutFounder />
+      <AboutFact />
     </div>
   );
 }

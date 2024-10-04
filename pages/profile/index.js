@@ -5,12 +5,14 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import ProfileDetail from "../../components/profileDetails";
+import ProfileNftList from "../../components/profileNftList";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -191,7 +193,8 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <ProfileDetail />
+      <ProfileNftList />
     </div>
   );
 }

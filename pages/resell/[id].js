@@ -5,12 +5,13 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import Nft1 from "../../public/NFT1.png";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -191,7 +192,24 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <div className="flex flex-col justify-center gap-6 items-center w-full mb-[3rem]">
+        <h1 className="font-bold text-5xl">💵 Resell your NFT and set price</h1>
+        <div className="flex flex-col gap-2 justify-center w-[50vw]">
+          <label htmlFor="username" className="font-bold text-xl">
+            Price
+          </label>
+          <input
+            type="number"
+            id="username"
+            placeholder="price"
+            className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+          />
+        </div>
+        <Image src={Nft1} alt="nft1" className="w-[250px] rounded-[15px]" />
+        <button className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]">
+          Resell NFT
+        </button>
+      </div>
     </div>
   );
 }

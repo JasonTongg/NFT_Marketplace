@@ -5,12 +5,15 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import CollectionDetail from "@/components/collectionDetail";
+import CollectionList from "../../components/collectionList";
+import NeverMiss from "@/components/neverMiss";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -183,7 +186,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-6">
+    <div className="px-16 flex flex-col items-center justify-center gap-4">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -191,7 +194,9 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <CollectionDetail />
+      <CollectionList />
+      <NeverMiss />
     </div>
   );
 }

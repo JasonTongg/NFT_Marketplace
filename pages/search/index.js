@@ -5,12 +5,18 @@ import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import Nft1 from "../../public/NFT1.png";
+import { FaRegHeart } from "react-icons/fa6";
+import Profile from "../../public/profile.svg";
+import { LuTimer } from "react-icons/lu";
+import { IoIosSearch } from "react-icons/io";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -191,7 +197,73 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">
+        <label
+          htmlFor="search"
+          className="border-[2px] border-[#ECDFCC] rounded-[100px] py-2 px-6 grid items-center justify-center mx-auto  gap-3 w-[50vw]"
+          style={{ gridTemplateColumns: "auto 1fr auto" }}
+        >
+          <IoIosSearch className="text-2xl" />
+          <input
+            type="text"
+            placeholder="Type your keyword..."
+            id="search"
+            className="py-2 px-4 placeholder:text-[#ECDFCC] bg-transparent outline-none border-none"
+          />
+          <MdKeyboardDoubleArrowRight className="text-2xl" />
+        </label>
+        <div className="flex items-center gap-16 my-8">
+          <p className="cursor-pointer text-lg">NFTs</p>
+          <p className="cursor-pointer text-lg">Arts</p>
+          <p className="cursor-pointer text-lg">Musics</p>
+          <p className="cursor-pointer text-lg">Sports</p>
+          <p className="cursor-pointer text-lg">Photography</p>
+        </div>
+        <div
+          className="grid gap-x-6 gap-y-12"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          }}
+        >
+          {Array.from({ length: 15 }).map((item, index) => (
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div
+                key={index}
+                className="rounded-[20px] object-cover relative w-full h-[200px] bg-no-repeat bg-cover bg-center"
+                style={{ backgroundImage: `url('${Nft1.src}')` }}
+              >
+                <div className="px-4 py-1 rounded-[20px] absolute top-[10px] right-[10px] flex items-center justify-center gap-2 bg-[#ECDFCC] text-[#181C14]">
+                  <FaRegHeart />
+                  <p>22</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-2 w-full">
+                <div className="flex items-center justify-center gap-1">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="bg-no-repeat bg-cover bg-center border-[2px] border-[#ECDFCC] rounded-[100px] w-[20px] h-[20px]"
+                      style={{ backgroundImage: `url('${Profile.src}')` }}
+                    ></div>
+                  ))}
+                </div>
+                <p>50</p>
+              </div>
+              <h2 className="text-2xl font-bold w-full">Time Traval</h2>
+              <div className="p-2 rounded-[10px] border-[2px] border-[#ECDFCC] flex items-center justify-center w-full gap-3">
+                <div className="text-center rounded-[10px] bg-[#ECDFCC] py-1 px-4 text-[#181C14]">
+                  Current Bid
+                </div>
+                <p className="text-center">0.002 SepoliaETH</p>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <LuTimer />
+                <p>2 hours left</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

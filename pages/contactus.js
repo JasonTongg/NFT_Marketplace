@@ -1,3 +1,4 @@
+import { FaLocationDot } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
@@ -11,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { MdOutlineMail } from "react-icons/md";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -183,7 +185,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-6">
+    <div className="px-16 flex flex-col items-center justify-center gap-6 w-full">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -191,7 +193,85 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      Home
+      <div className="flex flex-col items-center justify-center gap-4 w-full mb-[3rem]">
+        <h2 className="text-5xl font-bold">Contact Us</h2>
+        <div
+          className="grid gap-4 w-full items-start"
+          style={{ gridTemplateColumns: "300px 1fr" }}
+        >
+          <div className="flex flex-col justify-center gap-4">
+            <div className="flex flex-col justify-center gap-2">
+              <h2 className="font-bold text-xl flex items-center gap-2">
+                <FaLocationDot /> Address
+              </h2>
+              <p>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Enim,
+                nam.
+              </p>
+            </div>
+            <div className="flex flex-col justify-center gap-2">
+              <h2 className="font-bold text-xl flex items-center gap-2">
+                💌 Email
+              </h2>
+              <p>Example@gmail.com</p>
+            </div>
+            <div className="flex flex-col justify-center gap-2">
+              <h2 className="font-bold text-xl flex items-center gap-2">
+                ☎️ Phone
+              </h2>
+              <p>+0000000000000</p>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center gap-4">
+            <div className="flex flex-col gap-2 justify-center">
+              <label htmlFor="username" className="font-bold text-xl">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Full Name"
+                className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+              />
+            </div>
+            <div className="flex flex-col gap-2 justify-center">
+              <label htmlFor="email" className="font-bold text-xl">
+                Email
+              </label>
+              <label
+                htmlFor="email"
+                className="grid gap-2 border-[2px] border-[#ECDFCC] rounded-[10px] text-lg "
+                style={{ gridTemplateColumns: "50px 1fr" }}
+              >
+                <div className="bg-[#ECDFCC] flex items-center justify-center text-[#181C14]">
+                  <MdOutlineMail className="text-2xl" />
+                </div>
+                <input
+                  type="text"
+                  id="email"
+                  placeholder="email"
+                  className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                />
+              </label>
+            </div>
+            <div className="flex flex-col gap-2 justify-center">
+              <label htmlFor="description" className="font-bold text-xl">
+                Message
+              </label>
+              <textarea
+                type="text"
+                rows={5}
+                id="description"
+                placeholder="Message"
+                className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+              />
+            </div>
+            <button className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]">
+              Send Message
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

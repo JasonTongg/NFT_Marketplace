@@ -11,8 +11,8 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#181C14",
     fontSize: theme.typography.pxToRem(12),
+    padding: 0,
   },
 }));
 
@@ -27,18 +27,6 @@ export default function navbar({
       <Link href="/">
         <LiaEthereum className="text-5xl" />
       </Link>
-      <label
-        htmlFor="search"
-        className="flex items-center justify-between border-[#ECDFCC] border-[2px] rounded-[20px] px-4 py-2"
-      >
-        <input
-          type="text"
-          id="search"
-          className="bg-transparent outline-none border-none placeholder:text-[#ECDFCC]"
-          placeholder="Search NFT"
-        />
-        <IoSearch className="text-2xl" />
-      </label>
       <div className="flex items-center justify-center gap-12">
         <HtmlTooltip
           title={
