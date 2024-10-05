@@ -194,7 +194,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-5">
+    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-5">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -202,7 +202,7 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      <div className="grid grid-cols-2 w-full gap-8 py-8 items-start content-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8 py-8 items-start content-start">
         <div className="rounded-[10px] overflow-hidden w-full flex flex-col items-center justify-center gap-4">
           <div
             className="bg-no-repeat bg-cover bg-center relative w-full h-[500px]"
@@ -268,7 +268,7 @@ export default function index() {
           </Accordion>
         </div>
         <div className="w-full flex flex-col gap-6">
-          <h1 className="text-5xl font-bold">Time Traval #11</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold">Time Traval #11</h1>
           <div className="flex items-center gap-6">
             <div className="flex items-center justify-center gap-2">
               <Image src={Profile} alt="profile" className="w-[40px]" />

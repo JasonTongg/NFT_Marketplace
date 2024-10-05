@@ -9,7 +9,7 @@ export default function topCreator() {
   const [active, setActive] = useState(0);
   return (
     <div className="flex flex-col items-center justify-center gap-8">
-      <h2 className="text-5xl font-bold">Top Creator List</h2>
+      <h2 className="text-4xl sm:text-5xl font-bold">Top Creator List</h2>
       <div className="border-[2px] border-[#ECDFCC] rounded-[15px] p-2">
         <button
           className="rounded-[15px] transition-all ease-out py-2 px-4"

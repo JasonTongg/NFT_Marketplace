@@ -12,6 +12,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        xs: "400px", // Custom breakpoint for 400px
+      },
     },
   },
   plugins: [],

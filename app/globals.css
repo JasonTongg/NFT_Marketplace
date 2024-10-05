@@ -62,3 +62,19 @@ html::-webkit-scrollbar-thumb {
   background: #ecdfcc;
   border-radius: 100px;
 }
+
+.grid-contact {
+  grid-template-columns: 300px 1fr;
+
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-setting {
+  grid-template-columns: 150px 1fr;
+
+  @media only screen and (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}

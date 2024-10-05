@@ -7,7 +7,7 @@ import { LuTimer } from "react-icons/lu";
 export default function collectionList() {
   return (
     <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">
-      <div className="flex items-center gap-16 my-8">
+      <div className="flex items-center gap-y-4 gap-x-16 my-8 flex-wrap">
         <p className="cursor-pointer text-lg">NFTs</p>
         <p className="cursor-pointer text-lg">Arts</p>
         <p className="cursor-pointer text-lg">Musics</p>

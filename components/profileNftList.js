@@ -8,7 +8,7 @@ export default function profileNftList() {
   const [active, setActive] = useState(0);
   return (
     <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">
-      <div className="flex items-center gap-8 my-8">
+      <div className="flex items-center gap-y-4 gap-x-8 my-8 flex-wrap">
         <p
           style={{
             color: `${active === 0 ? "#181C14" : "#ECDFCC"}`,

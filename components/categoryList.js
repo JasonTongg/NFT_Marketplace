@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function categoryList() {
   return (
     <div className="flex flex-col justify-center gap-4 w-full">
-      <h2 className="text-5xl font-bold">Browse by Category</h2>
+      <h2 className="text-4xl sm:text-5xl font-bold">Browse by Category</h2>
       <p className="mb-[2rem]">
         Explore the NFTs in the most featured categories.
       </p>

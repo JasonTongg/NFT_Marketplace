@@ -23,11 +23,11 @@ export default function navbar({
   openAddress,
 }) {
   return (
-    <div className="w-full py-4 flex items-center justify-between gap-4">
-      <Link href="/">
+    <div className="w-full py-4 flex items-center justify-center sm:justify-between gap-4">
+      <Link href="/" className="sm:block hidden">
         <LiaEthereum className="text-5xl" />
       </Link>
-      <div className="flex items-center justify-center gap-12">
+      <div className="flex items-center justify-between sm:justify-center gap-4 xs:gap-12">
         <HtmlTooltip
           title={
             <div className="border-[#ECDFCC] bg-[#181C14] border-[2px] rounded-[10px] flex flex-col items-center justify-center gap-3 py-3 px-2">

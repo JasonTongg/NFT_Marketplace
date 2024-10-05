@@ -4,9 +4,9 @@ import Image from "next/image";
 
 export default function aboutFounder() {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 w-full min-h-[70vh]">
+    <div className="flex flex-col items-center mt-[2rem] justify-center gap-3 w-full min-h-[70vh]">
       <h2 className="text-5xl font-bold">🤓 Founder</h2>
-      <p className="w-[50%] text-center mb-[1rem]">
+      <p className="w-[85vw] md:w-[50%] text-center mb-[1rem]">
         We're impartial and independent, everyday we create distinctive
         world-class programmes and content
       </p>

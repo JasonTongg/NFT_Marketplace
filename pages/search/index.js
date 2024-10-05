@@ -189,7 +189,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-6">
+    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-6">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -200,7 +200,7 @@ export default function index() {
       <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">
         <label
           htmlFor="search"
-          className="border-[2px] border-[#ECDFCC] rounded-[100px] py-2 px-6 grid items-center justify-center mx-auto  gap-3 w-[50vw]"
+          className="border-[2px] border-[#ECDFCC] rounded-[100px] py-2 px-6 grid items-center justify-center mx-auto gap-3 w-[95%] md:w-[50vw]"
           style={{ gridTemplateColumns: "auto 1fr auto" }}
         >
           <IoIosSearch className="text-2xl" />
@@ -212,7 +212,7 @@ export default function index() {
           />
           <MdKeyboardDoubleArrowRight className="text-2xl" />
         </label>
-        <div className="flex items-center gap-16 my-8">
+        <div className="flex items-center gap-x-16 gap-y-3 my-8 flex-wrap">
           <p className="cursor-pointer text-lg">NFTs</p>
           <p className="cursor-pointer text-lg">Arts</p>
           <p className="cursor-pointer text-lg">Musics</p>

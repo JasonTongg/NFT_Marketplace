@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function footer() {
   return (
     <div className="bg-[#3C3D37] flex flex-col items-center justify-center gap-2 px-16 py-6 w-full">
-      <div className=" flex justify-center gap-16 w-full">
+      <div className=" flex justify-center gap-x-16 gap-y-6 w-full flex-wrap">
         <div className="flex gap-3">
           <LiaEthereum className="text-6xl" />
           <p className="text-justify w-[250px]">
@@ -15,7 +15,7 @@ export default function footer() {
           </p>
         </div>
         <div className="flex flex-col gap-1 items-center">
-          <h2 className="font-bold text-xl">Discover</h2>
+          <h2 className="font-bold text-xl text-center">Discover</h2>
           <div className="grid grid-cols-2 gap-2 justify-center justify-items-center">
             {[
               "Collection",
@@ -24,16 +24,16 @@ export default function footer() {
               "Account Setting",
               "Upload NFT",
             ].map((item, index) => (
-              <Link href="#" key={index}>
+              <Link href="#" key={index} className="text-center">
                 {item}
               </Link>
             ))}
           </div>
         </div>
         <div className="flex flex-col gap-1 items-center">
-          <h2 className="font-bold text-xl">Help Center</h2>
+          <h2 className="font-bold text-xl text-center">Help Center</h2>
           {["About", "Contact Us"].map((item, index) => (
-            <Link href="#" key={index}>
+            <Link href="#" key={index} className="text-center">
               {item}
             </Link>
           ))}

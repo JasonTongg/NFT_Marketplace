@@ -34,10 +34,12 @@ export default function HomeNftDetails() {
     setActive(active - 1 < 0 ? 0 : active - 1);
   };
   return (
-    <div className="w-full flex items-center justify-center my-8 ">
-      <div className="translate-x-16 relative z-[10] p-4 bg-[#181C14] w-[600px] flex flex-col gap-6 rounded-[30px] border-[2px] border-[#ECDFCC] min-h-[200px]">
-        <h2 className="text-3xl font-bold">Hello NFT</h2>
-        <div className="grid grid-cols-2 w-full">
+    <div className="w-full flex items-center justify-center my-8 lg:flex-row flex-col-reverse">
+      <div className="lg:translate-y-[0px] translate-y-[-4rem] lg:translate-x-16 relative z-[10] p-4 bg-[#181C14] w-[80vw] sm:w-[600px] sm:justify-start justify-center flex flex-col gap-6 rounded-[30px] border-[2px] border-[#ECDFCC] min-h-[200px]">
+        <h2 className="text-3xl font-bold sm:text-start text-center">
+          Hello NFT
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-2 justify-center">
           <div className="flex items-center gap-2">
             <Image src={Profile} className="w-[50px]" />
             <div className="flex flex-col">
@@ -55,17 +57,17 @@ export default function HomeNftDetails() {
             </div>
           </div>
         </div>
-        <div className="border-[2px] rounded-[5px] border-[#3C3D37] p-3 flex gap-4 items-center">
+        <div className="border-[2px] xs:flex-row flex-col rounded-[5px] border-[#3C3D37] p-3 flex gap-4 items-center">
           <div className="bg-[#3C3D37] py-2 px-4 rounded-[5px]">
             Current Bet
           </div>
-          <p>0.0003 Sepolia ETH</p>
+          <p>0.0003 SepoliaETH</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center sm:justify-start justify-center gap-2">
           <MdOutlineTimer className="text-2xl" />
           <p>Auction ending in</p>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex sm:justify-start justify-center items-center gap-6">
           <div className="flex flex-col items-center justify-center">
             <p className="font-bold text-2xl">21</p>
             <p>Days</p>
@@ -111,7 +113,7 @@ export default function HomeNftDetails() {
           )}
         </div>
       </div>
-      <div className="-translate-x-16 p-2 rounded-[30px] border-[2px] border-[#ECDFCC]">
+      <div className="lg:-translate-x-16 lg:translate-y-0 translate-y-[4rem] p-2 rounded-[30px] border-[2px] border-[#ECDFCC]">
         {nftList[active].image}
       </div>
     </div>

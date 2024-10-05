@@ -9,20 +9,20 @@ import { FaInstagram } from "react-icons/fa";
 
 export default function profileDetail() {
   return (
-    <div className="border-[2px] border-[#ECDFCC] rounded-[15px] p-6 flex items-center gap-6 mb-[2rem] w-full">
+    <div className="border-[2px] sm:flex-row flex-col border-[#ECDFCC] rounded-[15px] p-6 flex items-center gap-6 mb-[2rem] w-full">
       <Image
         src={Nft1}
         alt="nft1"
-        className="w-[300px] h-full object-cover rounded-[15px]"
+        className="w-[200px] lg:w-[300px] h-full object-cover rounded-[15px]"
       />
-      <div className="flex flex-col justify-center gap-5">
+      <div className="flex flex-col justify-center sm:items-start items-center gap-5">
         <h1 className="text-5xl font-bold flex items-center gap-2">
           Jason <MdVerified />
         </h1>
-        <p className="flex items-center gap-2 text-sm">
+        <p className="flex items-center gap-2 text-sm break-all">
           0x0000000000000000000000000000000000000000 <LuCopy />
         </p>
-        <p>
+        <p className="sm:text-start text-center">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius
           quisquam ratione quidem incidunt. Necessitatibus earum sint quas
           nostrum. Cumque perspiciatis iusto saepe doloremque dolores commodi

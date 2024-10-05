@@ -185,7 +185,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-6 w-full">
+    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-6 w-full">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -194,17 +194,14 @@ export default function index() {
         openAddress={openModal}
       />
       <div className="flex flex-col items-center justify-center gap-4 w-full mb-[3rem]">
-        <h2 className="text-5xl font-bold">Contact Us</h2>
-        <div
-          className="grid gap-4 w-full items-start"
-          style={{ gridTemplateColumns: "300px 1fr" }}
-        >
-          <div className="flex flex-col justify-center gap-4">
+        <h2 className="text-4xl sm:text-5xl font-bold">Contact Us</h2>
+        <div className="grid gap-4 w-full items-start grid-contact">
+          <div className="flex flex-col justify-center gap-4 w-full">
             <div className="flex flex-col justify-center gap-2">
               <h2 className="font-bold text-xl flex items-center gap-2">
                 <FaLocationDot /> Address
               </h2>
-              <p>
+              <p className="md:w-auto w-[300px]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Enim,
                 nam.
               </p>

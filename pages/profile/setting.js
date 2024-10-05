@@ -191,7 +191,7 @@ export default function setting() {
   };
 
   return (
-    <div className="w-full px-16 flex flex-col items-center justify-center gap-6">
+    <div className="w-full overflow-hidden px-4 md:px-16 flex flex-col items-center justify-center gap-6">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -199,7 +199,7 @@ export default function setting() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      <div className="w-[60vw] flex flex-col items-center justify-center gap-4">
+      <div className="w-[100%] md:w-[60vw] flex flex-col items-center justify-center gap-4">
         <div className="w-full flex flex-col justify-center gap-4">
           <h2 className="text-4xl font-bold">Profile settings</h2>
           <p>
@@ -208,10 +208,7 @@ export default function setting() {
           </p>
           <div className="w-full h-[2px] bg-[#3C3D37] opacity-80"></div>
         </div>
-        <div
-          className="grid gap-6 w-full items-start mt-[3rem] mb-[3rem]"
-          style={{ gridTemplateColumns: "150px 1fr" }}
-        >
+        <div className="grid gap-6 w-full items-start mt-[3rem] mb-[3rem] grid-setting">
           <label
             for="image"
             className="cursor-pointer flex flex-col items-center justify-center gap-2"

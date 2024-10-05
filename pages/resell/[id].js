@@ -184,7 +184,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-6">
+    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-6">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
@@ -193,8 +193,10 @@ export default function index() {
         openAddress={openModal}
       />
       <div className="flex flex-col justify-center gap-6 items-center w-full mb-[3rem]">
-        <h1 className="font-bold text-5xl">💵 Resell your NFT and set price</h1>
-        <div className="flex flex-col gap-2 justify-center w-[50vw]">
+        <h1 className="font-bold text-4xl md:text-5xl text-center">
+          💵 Resell your NFT and set price
+        </h1>
+        <div className="flex flex-col gap-2 justify-center w-[95%] md:w-[50vw]">
           <label htmlFor="username" className="font-bold text-xl">
             Price
           </label>

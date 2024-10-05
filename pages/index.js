@@ -190,7 +190,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-16 flex flex-col items-center justify-center gap-16">
+    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-16">
       {/* <ToastContainer /> */}
       <Navbar
         address={address}
