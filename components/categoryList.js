@@ -1,6 +1,7 @@
 import React from "react";
 import Nft1 from "../public/NFT1.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function categoryList() {
   return (
@@ -14,7 +15,10 @@ export default function categoryList() {
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
       >
         {Array.from({ length: 11 }).map((item, index) => (
-          <div className="flex flex-col items-center justify-center gap-3 w-full">
+          <Link
+            href="/collection/sds"
+            className="flex flex-col items-center justify-center gap-3 w-full"
+          >
             <Image
               src={Nft1}
               alt="category"
@@ -27,7 +31,7 @@ export default function categoryList() {
                 <p className="text-md">2995 NFTs</p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

@@ -196,7 +196,7 @@ export default function index() {
       />
       <CollectionDetail />
       <CollectionList />
-      <NeverMiss />
+      {/* <NeverMiss /> */}
     </div>
   );
 }

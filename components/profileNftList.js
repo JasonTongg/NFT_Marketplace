@@ -3,6 +3,7 @@ import Nft1 from "../public/NFT1.png";
 import { FaRegHeart } from "react-icons/fa6";
 import Profile from "../public/profile.svg";
 import { LuTimer } from "react-icons/lu";
+import Link from "next/link";
 
 export default function profileNftList() {
   const [active, setActive] = useState(0);
@@ -67,7 +68,10 @@ export default function profileNftList() {
         }}
       >
         {Array.from({ length: 15 }).map((item, index) => (
-          <div className="flex flex-col items-center justify-center gap-4">
+          <Link
+            href="/nft/sdsdv"
+            className="flex flex-col items-center justify-center gap-4"
+          >
             <div
               key={index}
               className="rounded-[20px] object-cover relative w-full h-[200px] bg-no-repeat bg-cover bg-center"
@@ -79,7 +83,7 @@ export default function profileNftList() {
               </div>
             </div>
             <h2 className="text-2xl font-bold">Time Traval</h2>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

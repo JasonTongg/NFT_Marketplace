@@ -18,23 +18,33 @@ export default function footer() {
           <h2 className="font-bold text-xl text-center">Discover</h2>
           <div className="grid grid-cols-2 gap-2 justify-center justify-items-center">
             {[
-              "Collection",
-              "Search",
-              "Author Profile",
-              "Account Setting",
-              "Upload NFT",
+              { title: "Search", href: "/search" },
+              { title: "Author Profile", href: "/profile/sdasd" },
+              { title: "Account Setting", href: "/profile/setting" },
+              { title: "Upload NFT", href: "/nft/new" },
             ].map((item, index) => (
-              <Link href="#" key={index} className="text-center">
-                {item}
+              <Link
+                href={item.href}
+                key={index}
+                className="text-center hover-effect"
+              >
+                {item.title}
               </Link>
             ))}
           </div>
         </div>
         <div className="flex flex-col gap-1 items-center">
           <h2 className="font-bold text-xl text-center">Help Center</h2>
-          {["About", "Contact Us"].map((item, index) => (
-            <Link href="#" key={index} className="text-center">
-              {item}
+          {[
+            { title: "About Us", href: "/about" },
+            { title: "Contact Us", href: "/contactus" },
+          ].map((item, index) => (
+            <Link
+              href={item.href}
+              key={index}
+              className="text-center hover-effect"
+            >
+              {item.title}
             </Link>
           ))}
         </div>

@@ -32,12 +32,12 @@ export default function navbar({
           title={
             <div className="border-[#ECDFCC] bg-[#181C14] border-[2px] rounded-[10px] flex flex-col items-center justify-center gap-3 py-3 px-2">
               {[
-                { title: "Collection", href: "#" },
-                { title: "Search", href: "#" },
-                { title: "Author Profile", href: "#" },
-                { title: "NFT Details", href: "#" },
-                { title: "Account Setting", href: "#" },
-                { title: "Upload NFT", href: "#" },
+                { title: "Search", href: "/search" },
+                { title: "Author Profile", href: "/profile/sdasd" },
+                { title: "Account Setting", href: "/profile/setting" },
+                { title: "Upload NFT", href: "/nft/new" },
+                { title: "About Us", href: "/about" },
+                { title: "Contact Us", href: "/contactus" },
               ].map((item, index) => (
                 <Link
                   href={item.href}
@@ -52,7 +52,9 @@ export default function navbar({
         >
           <button className="hover-effect">Discover</button>
         </HtmlTooltip>
-        <button className="hover-effect">Create</button>
+        <Link href="/nft/new" className="hover-effect">
+          Create
+        </Link>
         {isConnected ? (
           <button onClick={openAddress} className="hover-button">
             {address.substring(0, 5)}...{address.substr(-5)}

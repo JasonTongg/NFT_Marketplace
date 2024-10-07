@@ -8,6 +8,7 @@ import { FaFireAlt } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { MdOutlineTimer } from "react-icons/md";
 import { FaAngleDoubleRight, FaAngleDoubleLeft } from "react-icons/fa";
+import Link from "next/link";
 
 export default function HomeNftDetails() {
   const [nftList, seetNftList] = useState([
@@ -87,12 +88,18 @@ export default function HomeNftDetails() {
         </div>
         <div className="w-full h-[2px] bg-[#3C3D37]"></div>
         <div className="w-full flex items-center justify-center gap-8">
-          <button className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]">
+          <Link
+            href="/nft/ascasc"
+            className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]"
+          >
             Place
-          </button>
-          <button className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]">
+          </Link>
+          <Link
+            href="/nft/sdcsd"
+            className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]"
+          >
             View
-          </button>
+          </Link>
         </div>
         <div className="flex items-center gap-8">
           {active !== 0 ? (

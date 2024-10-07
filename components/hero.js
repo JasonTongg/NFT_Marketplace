@@ -14,7 +14,7 @@ export default function hero() {
           Discover the most outstanding NFTs in all topics of life. Creative
           your NFTs and sell them.
         </p>
-        <Link href="#" className="hover-button">
+        <Link href="/search" className="hover-button">
           Start your search
         </Link>
       </div>

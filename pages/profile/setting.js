@@ -224,6 +224,7 @@ export default function setting() {
             />
           </label>
           <div className="w-full flex flex-col justify-center gap-6">
+            <button className="hover-button">Set as Author Account</button>
             <div className="flex flex-col gap-2 justify-center">
               <label htmlFor="username" className="font-bold text-xl">
                 Username

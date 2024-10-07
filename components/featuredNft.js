@@ -1,6 +1,7 @@
 import React from "react";
 import Nft1 from "../public/NFT1.png";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
+import Link from "next/link";
 
 export default function featuredNft() {
   return (
@@ -26,10 +27,11 @@ export default function featuredNft() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 w-full">
         {Array.from({ length: 6 }).map((item, index) => (
-          <div
+          <Link
             key={index}
             className="bg-no-repeat cursor-pointer bg-cover bg-center w-full h-[400px] rounded-[10px] relative"
             style={{ backgroundImage: `url(${Nft1.src})` }}
+            href="/nft/sdfsd"
           >
             <div className="absolute flex items-center justify-center gap-2 top-[20px] left-[20px] px-4 py-1 cursor-pointer rounded-[15px] bg-[#ECDFCC] text-[#181C14]">
               <IoIosHeartEmpty className="text-lg" />
@@ -46,7 +48,7 @@ export default function featuredNft() {
                 <p>0.0004 Sepolia ETH</p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

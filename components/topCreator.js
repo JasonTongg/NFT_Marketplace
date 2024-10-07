@@ -4,6 +4,7 @@ import Image from "next/image";
 import { RiMedalLine } from "react-icons/ri";
 import { MdVerified } from "react-icons/md";
 import Nft1 from "../public/NFT1.png";
+import Link from "next/link";
 
 export default function topCreator() {
   const [active, setActive] = useState(0);
@@ -34,7 +35,8 @@ export default function topCreator() {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-6">
         {[0, 0, 0, 0].map((item, index) => (
-          <div
+          <Link
+            href="/profile/dfsdf"
             key={index}
             className="flex flex-col items-center justify-center gap-10"
           >
@@ -62,12 +64,15 @@ export default function topCreator() {
                 Follow
               </button>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
-      <button className="bg-[#ECDFCC] text-[#181C14] px-4 py-2 rounded-[15px]">
+      <Link
+        href="/profile/setting"
+        className="bg-[#ECDFCC] text-[#181C14] px-4 py-2 rounded-[15px]"
+      >
         Become Author
-      </button>
+      </Link>
     </div>
   );
 }
