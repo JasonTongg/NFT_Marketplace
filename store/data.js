@@ -1,16 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Abi from "./Token.json";
+import Abi from "./abi.json";
 
 const initialState = {
-  contractAddress: "0x02296aF160a7e5A697743E5CA5A0038847F0bd8F",
+  contractAddress: "0x22E92C832498c05f63967d4450Fb30114ACf9E65",
   contractAbi: Abi.abi,
 };
 
 export const getApiData = createAsyncThunk("callTitle", async (_, thunkAPI) => {
   try {
-    const response = await fetch(
-      ``
-    );
+    const response = await fetch(``);
     const data = await response.json();
     return data;
   } catch (error) {

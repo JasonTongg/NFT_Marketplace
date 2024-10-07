@@ -24,6 +24,16 @@
   width: fit-content;
 }
 
+.hover-button {
+  transition: all 0.3s ease-out;
+  border: 2px solid #ecdfcc;
+  border-radius: 20px;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
 .hover-button:hover {
   transform: translateY(-5px);
   box-shadow: 5px 3px 0px #ecdfcc;
