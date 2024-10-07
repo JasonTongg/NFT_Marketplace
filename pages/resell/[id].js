@@ -64,6 +64,7 @@ export default function index() {
 
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
+  const [price, setPrice] = useState(0);
 
   const connectEthereumWallet = async () => {
     try {
@@ -201,6 +202,7 @@ export default function index() {
             Price
           </label>
           <input
+            onChange={(e) => setPrice(e.target.value)}
             type="number"
             id="username"
             placeholder="price"

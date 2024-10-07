@@ -72,6 +72,16 @@ export default function setting() {
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [desc, setDesc] = useState("");
+  const [website, setWebsite] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [wallet, setWallet] = useState("");
+  const [profileImage, setProfileImage] = useState();
+
   const connectEthereumWallet = async () => {
     try {
       const instance = await web3Modal.open();
@@ -220,6 +230,7 @@ export default function setting() {
               id="image"
               name="image"
               accept="image/*"
+              onChange={(e) => setProfileImage(e.target.value)}
               className="invisible hidden"
             />
           </label>
@@ -231,6 +242,7 @@ export default function setting() {
               </label>
               <input
                 type="text"
+                onChange={(e) => setName(e.target.value)}
                 id="username"
                 placeholder="username"
                 className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
@@ -251,6 +263,7 @@ export default function setting() {
                 <input
                   type="text"
                   id="email"
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="email"
                   className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />
@@ -264,6 +277,7 @@ export default function setting() {
                 type="text"
                 rows={5}
                 id="description"
+                onChange={(e) => setDesc(e.target.value)}
                 placeholder="description"
                 className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
               />
@@ -284,6 +298,7 @@ export default function setting() {
                   type="text"
                   id="website"
                   placeholder="website"
+                  onChange={(e) => setWebsite(e.target.value)}
                   className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />
               </label>
@@ -310,6 +325,7 @@ export default function setting() {
                     type="text"
                     id="Facebook"
                     placeholder="Facebook"
+                    onChange={(e) => setFacebook(e.target.value)}
                     className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
@@ -330,6 +346,7 @@ export default function setting() {
                     type="text"
                     id="Twitter"
                     placeholder="Twitter"
+                    onChange={(e) => setTwitter(e.target.value)}
                     className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
@@ -350,6 +367,7 @@ export default function setting() {
                     type="text"
                     id="Instagram"
                     placeholder="Instagram"
+                    onChange={(e) => setInstagram(e.target.value)}
                     className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
@@ -370,6 +388,7 @@ export default function setting() {
                 <input
                   type="text"
                   id="Wallet"
+                  onChange={(e) => setWallet(e.target.value)}
                   placeholder="Wallet"
                   className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />

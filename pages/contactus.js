@@ -66,6 +66,10 @@ export default function index() {
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
   const connectEthereumWallet = async () => {
     try {
       const instance = await web3Modal.open();
@@ -225,6 +229,7 @@ export default function index() {
                 Full Name
               </label>
               <input
+                onChange={(e) => setName(e.target.value)}
                 type="text"
                 id="username"
                 placeholder="Full Name"
@@ -236,6 +241,7 @@ export default function index() {
                 Email
               </label>
               <label
+                onChange={(e) => setEmail(e.target.value)}
                 htmlFor="email"
                 className="grid gap-2 border-[2px] border-[#ECDFCC] rounded-[10px] text-lg "
                 style={{ gridTemplateColumns: "50px 1fr" }}
@@ -256,6 +262,7 @@ export default function index() {
                 Message
               </label>
               <textarea
+                onChange={(e) => setMessage(e.target.value)}
                 type="text"
                 rows={5}
                 id="description"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
 import {
@@ -17,6 +17,7 @@ import Profile from "../../public/profile.svg";
 import { LuTimer } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import debounce from "lodash/debounce";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -69,6 +70,9 @@ export default function index() {
 
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("NFTs");
 
   const connectEthereumWallet = async () => {
     try {
@@ -178,6 +182,13 @@ export default function index() {
     }
   };
 
+  const handleSearch = () => {
+    console.log("Searching...");
+  };
+
+  // Debounce the handleSearch function
+  const debouncedHandleSearch = useCallback(debounce(handleSearch, 300), []);
+
   useEffect(() => {
     if (isConnected) {
       connectContract();
@@ -205,6 +216,10 @@ export default function index() {
         >
           <IoIosSearch className="text-2xl" />
           <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+              debouncedHandleSearch();
+            }}
             type="text"
             placeholder="Type your keyword..."
             id="search"
@@ -213,11 +228,51 @@ export default function index() {
           <MdKeyboardDoubleArrowRight className="text-2xl" />
         </label>
         <div className="flex items-center gap-x-16 gap-y-3 my-8 flex-wrap">
-          <p className="cursor-pointer text-lg">NFTs</p>
-          <p className="cursor-pointer text-lg">Arts</p>
-          <p className="cursor-pointer text-lg">Musics</p>
-          <p className="cursor-pointer text-lg">Sports</p>
-          <p className="cursor-pointer text-lg">Photography</p>
+          <p
+            onClick={() => setCategory("NFTs")}
+            style={{
+              color: `${category === "NFTs" ? "#ECDFCC" : "#697565"}`,
+            }}
+            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+          >
+            NFTs
+          </p>
+          <p
+            onClick={() => setCategory("Arts")}
+            style={{
+              color: `${category === "Arts" ? "#ECDFCC" : "#697565"}`,
+            }}
+            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center transition-all"
+          >
+            Arts
+          </p>
+          <p
+            onClick={() => setCategory("Musics")}
+            style={{
+              color: `${category === "Musics" ? "#ECDFCC" : "#697565"}`,
+            }}
+            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+          >
+            Musics
+          </p>
+          <p
+            onClick={() => setCategory("Sports")}
+            style={{
+              color: `${category === "Sports" ? "#ECDFCC" : "#697565"}`,
+            }}
+            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+          >
+            Sports
+          </p>
+          <p
+            onClick={() => setCategory("Photographies")}
+            style={{
+              color: `${category === "Photographies" ? "#ECDFCC" : "#697565"}`,
+            }}
+            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+          >
+            Photographies
+          </p>
         </div>
         <div
           className="grid gap-x-6 gap-y-12"

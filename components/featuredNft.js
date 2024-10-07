@@ -1,28 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import Nft1 from "../public/NFT1.png";
 import { IoIosHeartEmpty, IoMdHeart } from "react-icons/io";
 import Link from "next/link";
 
 export default function featuredNft() {
+  const [category, setCategory] = useState("NFTs");
+
   return (
     <div className="flex flex-col items-start justify-center gap-4 w-full">
       <h2 className="text-4xl sm:text-5xl font-bold">Featured NFTs</h2>
       <p>Discover the most outstanding NFTs in all topics of life.</p>
       <div className="flex items-center justify-center gap-x-8 md:gap-x-16 gap-y-4 my-8 flex-wrap">
-        <p className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center">
+        <p
+          onClick={() => setCategory("NFTs")}
+          style={{
+            color: `${category === "NFTs" ? "#ECDFCC" : "#697565"}`,
+          }}
+          className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+        >
           NFTs
         </p>
-        <p className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center">
+        <p
+          onClick={() => setCategory("Arts")}
+          style={{
+            color: `${category === "Arts" ? "#ECDFCC" : "#697565"}`,
+          }}
+          className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center transition-all"
+        >
           Arts
         </p>
-        <p className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center">
+        <p
+          onClick={() => setCategory("Musics")}
+          style={{
+            color: `${category === "Musics" ? "#ECDFCC" : "#697565"}`,
+          }}
+          className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+        >
           Musics
         </p>
-        <p className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center">
+        <p
+          onClick={() => setCategory("Sports")}
+          style={{
+            color: `${category === "Sports" ? "#ECDFCC" : "#697565"}`,
+          }}
+          className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+        >
           Sports
         </p>
-        <p className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center">
-          Photography
+        <p
+          onClick={() => setCategory("Photographies")}
+          style={{
+            color: `${category === "Photographies" ? "#ECDFCC" : "#697565"}`,
+          }}
+          className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+        >
+          Photographies
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 w-full">

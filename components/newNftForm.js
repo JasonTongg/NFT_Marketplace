@@ -13,6 +13,14 @@ import { ImPriceTag } from "react-icons/im";
 export default function newNftForm() {
   const [files, setFiles] = useState([]);
   const [active, setActive] = useState(0);
+  const [name, setName] = useState("");
+  const [website, setWebsite] = useState("");
+  const [desc, setDesc] = useState("");
+  const [collection, setCollection] = useState("");
+  const [price, setPrice] = useState("");
+  const [royal, setRoyal] = useState("");
+  const [size, setSize] = useState("");
+  const [propertie, setPropertie] = useState("");
 
   // Callback for handling the accepted files
   const onDrop = useCallback((acceptedFiles) => {
@@ -121,6 +129,7 @@ export default function newNftForm() {
         <input
           type="text"
           id="username"
+          onChange={(e) => setName(e.target.value)}
           placeholder="Item Name"
           className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
         />
@@ -141,6 +150,7 @@ export default function newNftForm() {
             type="text"
             id="website"
             placeholder="website"
+            onChange={(e) => setWebsite(e.target.value)}
             className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
           />
         </label>
@@ -153,6 +163,7 @@ export default function newNftForm() {
           type="text"
           rows={5}
           id="description"
+          onChange={(e) => setDesc(e.target.value)}
           placeholder="description"
           className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
         />
@@ -172,7 +183,10 @@ export default function newNftForm() {
                 color: `${active === index ? "#181C14" : "#ECDFCC"}`,
                 backgroundColor: `${active === index ? "#ECDFCC" : "#181C14"}`,
               }}
-              onClick={() => setActive(index)}
+              onClick={() => {
+                setActive(index);
+                setCollection("Sport");
+              }}
               className="transition-all cursor-pointer p-3 flex w-full flex-col items-center justify-center gap-3 border-[2px] border-[#ECDFCC] rounded-[10px]"
             >
               <div className="flex items-center justify-between gap-4 w-full">
@@ -210,6 +224,7 @@ export default function newNftForm() {
               type="text"
               id="Facebook"
               placeholder="Price"
+              onChange={(e) => setPrice(e.target.value)}
               className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
@@ -230,6 +245,7 @@ export default function newNftForm() {
               type="text"
               id="Twitter"
               placeholder="Royalties"
+              onChange={(e) => setRoyal(e.target.value)}
               className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
@@ -250,6 +266,7 @@ export default function newNftForm() {
               type="text"
               id="Instagram"
               placeholder="Size"
+              onChange={(e) => setSize(e.target.value)}
               className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
@@ -270,6 +287,7 @@ export default function newNftForm() {
               type="text"
               id="Instagram2"
               placeholder="Propertie"
+              onChange={(e) => setPropertie(e.target.value)}
               className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
