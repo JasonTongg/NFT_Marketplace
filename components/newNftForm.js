@@ -9,6 +9,8 @@ import { FaPercentage } from "react-icons/fa";
 import { GoPaperclip } from "react-icons/go";
 import { VscSymbolProperty } from "react-icons/vsc";
 import { ImPriceTag } from "react-icons/im";
+import { create } from "ipfs-http-client";
+import axios from "axios";
 
 export default function newNftForm() {
   const [files, setFiles] = useState([]);
@@ -36,7 +38,33 @@ export default function newNftForm() {
     });
 
     setFiles((prevFiles) => [...prevFiles, ...mappedFiles]);
+    uploadImage(mappedFiles[0].file);
   }, []);
+
+  const uploadImage = async (file) => {
+    const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      console.log(process.env.NEXT_PUBLIC_INFURA_KEY);
+      console.log(process.env.NEXT_PUBLIC_INFURA_SECRET);
+      const response = await axios.post(url, formData, {
+        maxBodyLength: "Infinity",
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+          pinata_api_key: process.env.NEXT_PUBLIC_INFURA_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_INFURA_SECRET,
+        },
+      });
+
+      console.log(
+        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
+      );
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Failed to upload the image");
+    }
+  };
 
   // Set up the dropzone
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -100,6 +128,8 @@ export default function newNftForm() {
                       objectFit: "cover",
                       marginRight: "10px",
                     }}
+                    width={60}
+                    height={60}
                   />
                 ) : (
                   <div
@@ -194,6 +224,8 @@ export default function newNftForm() {
                   src={Nft1}
                   alt="sddv"
                   className="w-[50px] h-[50px] rounded-[100px]"
+                  width={50}
+                  height={50}
                 />
                 <IoIosCheckmarkCircle className="text-4xl" />
               </div>
