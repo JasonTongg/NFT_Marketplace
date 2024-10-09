@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Abi from "./abi.json";
 
 const initialState = {
-  contractAddress: "0x22E92C832498c05f63967d4450Fb30114ACf9E65",
+  contractAddress: "0x24551a77fb18442abe59C357980955f78ABd4787",
   contractAbi: Abi.abi,
 };
 

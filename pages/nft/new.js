@@ -133,22 +133,33 @@ export default function index() {
   //     }
   //   };
 
-  //   const transferToken = async () => {
-  //     if (contract) {
-  //       try {
-  //         const transfer = await contract.transfer(
-  //           inputAddress,
-  //           BigInt(+inputValue)
-  //         );
-  //         contract.on("Transfer", (from, to, value) => {
-  //           toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
-  //           getHolderData();
-  //         });
-  //       } catch (error) {
-  //         console.error("Error Transfer Token: ", error);
-  //       }
-  //     }
-  //   };
+  const createNFT = async (
+    tokenURI,
+    price,
+    name,
+    description,
+    collectionType
+  ) => {
+    alert("Creating NFT");
+    if (contract) {
+      try {
+        const value = ethers.parseEther("0.000025");
+        await contract.createToken(
+          tokenURI,
+          BigInt(+price),
+          name,
+          description,
+          collectionType,
+          { value }
+        );
+        contract.on("MarketItemCreate", () => {
+          toast.success(`Your new NFT has been created successfully`);
+        });
+      } catch (error) {
+        console.error("Error Transfer Token: ", error);
+      }
+    }
+  };
 
   const connectContract = async () => {
     try {
@@ -185,14 +196,14 @@ export default function index() {
 
   return (
     <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-6">
-      {/* <ToastContainer /> */}
       <Navbar
         address={address}
         isConnected={isConnected}
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      <NewNftForm></NewNftForm>
+      <NewNftForm createNFT={createNFT} />
+      <ToastContainer />
     </div>
   );
 }

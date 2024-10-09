@@ -23,6 +23,10 @@ contract NFTMarketplace is ERC721URIStorage {
         address payable seller;
         address payable owner;
         uint256 price;
+        string name;
+        string description;
+        string collectionType;
+        string imageURI;
         bool sold;
     }
 
@@ -51,7 +55,7 @@ contract NFTMarketplace is ERC721URIStorage {
         return listingPrice;
     }
 
-    function createToken(string memory tokenURI, uint256 price) public payable returns(uint256){
+    function createToken(string memory tokenURI, uint256 price, string memory name, string memory description, string memory collectionType) public payable returns(uint256){
         _tokenIds.increment();
 
         uint256 newTokenId = _tokenIds.current();
@@ -59,17 +63,20 @@ contract NFTMarketplace is ERC721URIStorage {
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
 
-        createMarketItem(newTokenId, price);
+        createMarketItem(newTokenId, price, name, description, collectionType, tokenURI);
 
         return newTokenId;
     }
 
-    function createMarketItem(uint256 tokenId, uint256 price) private {
+    function createMarketItem(uint256 tokenId, uint256 price, string memory name, string memory description, string memory collectionType, string memory imageURI) private {
         require(price > 0, "Price must be at least 1");
+        require(bytes(name).length > 0, "Your name is empty");
+        require(bytes(description).length > 0, "Your description is empty");
+        require(bytes(collectionType).length > 0, "Your collection type is empty");
         require(msg.value == listingPrice, "price must be equal to listing price" );
 
         idMarketItem[tokenId] =  MarketItem(
-            tokenId, payable(msg.sender), payable(address(this)), price, false
+            tokenId, payable(msg.sender), payable(address(this)), price, name, description, collectionType, imageURI, false
         );
 
         _transfer(msg.sender, address(this), tokenId);

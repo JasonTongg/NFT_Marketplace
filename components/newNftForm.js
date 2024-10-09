@@ -11,8 +11,9 @@ import { VscSymbolProperty } from "react-icons/vsc";
 import { ImPriceTag } from "react-icons/im";
 import { create } from "ipfs-http-client";
 import axios from "axios";
+import { ethers } from "ethers";
 
-export default function newNftForm() {
+export default function newNftForm({ createNFT }) {
   const [files, setFiles] = useState([]);
   const [active, setActive] = useState(0);
   const [name, setName] = useState("");
@@ -38,7 +39,6 @@ export default function newNftForm() {
     });
 
     setFiles((prevFiles) => [...prevFiles, ...mappedFiles]);
-    uploadImage(mappedFiles[0].file);
   }, []);
 
   const uploadImage = async (file) => {
@@ -46,8 +46,6 @@ export default function newNftForm() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      console.log(process.env.NEXT_PUBLIC_INFURA_KEY);
-      console.log(process.env.NEXT_PUBLIC_INFURA_SECRET);
       const response = await axios.post(url, formData, {
         maxBodyLength: "Infinity",
         headers: {
@@ -57,6 +55,14 @@ export default function newNftForm() {
         },
       });
 
+      createNFT(
+        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`,
+        ethers.parseUnits(price.toString(), "gwei").toString(),
+        name,
+        desc,
+        collection
+      );
+
       console.log(
         `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
       );
@@ -64,6 +70,11 @@ export default function newNftForm() {
       console.error("Error uploading file:", error);
       alert("Failed to upload the image");
     }
+  };
+
+  const handleSubmit = () => {
+    alert("uploading...");
+    uploadImage(files[0].file);
   };
 
   // Set up the dropzone
@@ -117,19 +128,20 @@ export default function newNftForm() {
                   display: "flex",
                   alignItems: "center",
                 }}
+                className="flex-col items-center justify-center gap-6"
               >
                 {fileWrapper.preview ? (
                   <Image
                     src={fileWrapper.preview}
                     alt={fileWrapper.name}
                     style={{
-                      width: "60px",
-                      height: "60px",
+                      width: "300px",
+                      height: "300px",
                       objectFit: "cover",
                       marginRight: "10px",
                     }}
-                    width={60}
-                    height={60}
+                    width={300}
+                    height={300}
                   />
                 ) : (
                   <div
@@ -146,7 +158,16 @@ export default function newNftForm() {
                     <span>File</span>
                   </div>
                 )}
-                <span>{fileWrapper.name}</span>
+                <div className="flex flex-wrap gap-3 items-center justify-center">
+                  <span>Name: {name}</span>
+                  <span>Website: {website}</span>
+                  <span>Description: {desc}</span>
+                  <span>Collection: {collection}</span>
+                  <span>Price: {price}</span>
+                  <span>Royal: {royal}</span>
+                  <span>Size: {size}</span>
+                  <span>Propertie: {propertie}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -206,32 +227,36 @@ export default function newNftForm() {
             gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
           }}
         >
-          {Array.from({ length: 8 }).map((_, index) => (
-            <div
-              key={index}
-              style={{
-                color: `${active === index ? "#181C14" : "#ECDFCC"}`,
-                backgroundColor: `${active === index ? "#ECDFCC" : "#181C14"}`,
-              }}
-              onClick={() => {
-                setActive(index);
-                setCollection("Sport");
-              }}
-              className="transition-all cursor-pointer p-3 flex w-full flex-col items-center justify-center gap-3 border-[2px] border-[#ECDFCC] rounded-[10px]"
-            >
-              <div className="flex items-center justify-between gap-4 w-full">
-                <Image
-                  src={Nft1}
-                  alt="sddv"
-                  className="w-[50px] h-[50px] rounded-[100px]"
-                  width={50}
-                  height={50}
-                />
-                <IoIosCheckmarkCircle className="text-4xl" />
+          {["Animal", "Sport", "Gaming", "Art", "Photography", "Fashion"].map(
+            (item, index) => (
+              <div
+                key={index}
+                style={{
+                  color: `${active === index ? "#181C14" : "#ECDFCC"}`,
+                  backgroundColor: `${
+                    active === index ? "#ECDFCC" : "#181C14"
+                  }`,
+                }}
+                onClick={() => {
+                  setActive(index);
+                  setCollection(item);
+                }}
+                className="transition-all cursor-pointer p-3 flex w-full flex-col items-center justify-center gap-3 border-[2px] border-[#ECDFCC] rounded-[10px]"
+              >
+                <div className="flex items-center justify-between gap-4 w-full">
+                  <Image
+                    src={Nft1}
+                    alt="sddv"
+                    className="w-[50px] h-[50px] rounded-[100px]"
+                    width={50}
+                    height={50}
+                  />
+                  <IoIosCheckmarkCircle className="text-4xl" />
+                </div>
+                <h2 className="text-2xl font-bold">{item}</h2>
               </div>
-              <h2 className="text-2xl font-bold">Sport</h2>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
       <div
@@ -325,7 +350,10 @@ export default function newNftForm() {
           </label>
         </div>
       </div>
-      <button className="bg-[#ECDFCC] text-[#181C14] rounded-[10px] px-4 py-2 font-bold mb-[3rem]">
+      <button
+        onClick={handleSubmit}
+        className="bg-[#ECDFCC] text-[#181C14] rounded-[10px] px-4 py-2 font-bold mb-[3rem]"
+      >
         Upload
       </button>
     </div>

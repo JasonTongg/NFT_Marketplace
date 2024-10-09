@@ -71,6 +71,8 @@ export default function index() {
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
 
+  const [NFTs, setNFTs] = useState([]);
+
   const connectEthereumWallet = async () => {
     try {
       const instance = await web3Modal.open();
@@ -89,28 +91,29 @@ export default function index() {
     }
   };
 
-  // const getTransaction = async () => {
-  //   console.log("Getting Contract");
-  //   if (contract) {
-  //     console.log("There is contract");
-  //     try {
-  //       console.log("Start getting contract");
-  //       const transactions = await contract.getTransactions();
-  //       const formattedTransactions = transactions.map((tx) => ({
-  //         from: tx.from,
-  //         to: tx.to,
-  //         amount: tx.amount.toString(), // Convert BigNumber to string (or .toNumber() if small)
-  //         message: tx.message,
-  //       }));
+  const getMarkeNft = async () => {
+    if (contract) {
+      try {
+        const list = await contract.fetchMarketItem();
+        const formattedList = list.map((tx) => ({
+          tokenId: tx.tokenId,
+          owner: tx.owner,
+          seller: tx.seller,
+          price: tx.price.toString(),
+          name: tx.name,
+          description: tx.description,
+          collectionType: tx.collectionType,
+          imageURI: tx.imageURI,
+          sold: tx.sold,
+        }));
 
-  //       console.log("set Transaction");
-  //       setTransactions(formattedTransactions);
-  //       console.log("set Transaction done");
-  //     } catch (error) {
-  //       console.error("Error Get Transaction: ", error);
-  //     }
-  //   }
-  // };
+        setNFTs(formattedList);
+        console.log(formattedList);
+      } catch (error) {
+        console.error("Error Get Market NFT: ", error);
+      }
+    }
+  };
 
   //   const getHolderData = async () => {
   //     if (contract) {
@@ -164,6 +167,7 @@ export default function index() {
         // const allTokenHolder = await contract.balanceOf(address);
         // setAccountBalance(Number(allTokenHolder));
         // console.log("account balance: " + Number(allTokenHolder));
+        getMarkeNft();
       }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();
