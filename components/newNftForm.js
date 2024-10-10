@@ -13,13 +13,19 @@ import { create } from "ipfs-http-client";
 import axios from "axios";
 import { ethers } from "ethers";
 
-export default function newNftForm({ createNFT }) {
+export default function newNftForm({
+  createNFT,
+  address,
+  toast,
+  isLoading,
+  setIsLoading,
+}) {
   const [files, setFiles] = useState([]);
   const [active, setActive] = useState(0);
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
   const [desc, setDesc] = useState("");
-  const [collection, setCollection] = useState("");
+  const [collection, setCollection] = useState("Animal");
   const [price, setPrice] = useState("");
   const [royal, setRoyal] = useState("");
   const [size, setSize] = useState("");
@@ -38,7 +44,7 @@ export default function newNftForm({ createNFT }) {
       };
     });
 
-    setFiles((prevFiles) => [...prevFiles, ...mappedFiles]);
+    setFiles(mappedFiles);
   }, []);
 
   const uploadImage = async (file) => {
@@ -62,19 +68,32 @@ export default function newNftForm({ createNFT }) {
         desc,
         collection
       );
-
-      console.log(
-        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
-      );
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Failed to upload the image");
     }
   };
 
   const handleSubmit = () => {
-    alert("uploading...");
-    uploadImage(files[0].file);
+    if (address) {
+      if (
+        name === "" ||
+        website === "" ||
+        desc === "" ||
+        collection === "" ||
+        price === "" ||
+        royal === "" ||
+        size === "" ||
+        propertie === ""
+      ) {
+        toast.error("Please fill all the fields");
+        return;
+      } else {
+        uploadImage(files[0].file);
+        setIsLoading(true);
+      }
+    } else {
+      toast.error("Please connect your wallet first");
+    }
   };
 
   // Set up the dropzone
@@ -182,7 +201,8 @@ export default function newNftForm({ createNFT }) {
           id="username"
           onChange={(e) => setName(e.target.value)}
           placeholder="Item Name"
-          className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+          value={name}
+          className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 outline-none px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
         />
       </div>
       <div className="flex flex-col gap-2 justify-center">
@@ -202,7 +222,8 @@ export default function newNftForm({ createNFT }) {
             id="website"
             placeholder="website"
             onChange={(e) => setWebsite(e.target.value)}
-            className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+            value={website}
+            className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
           />
         </label>
       </div>
@@ -216,7 +237,8 @@ export default function newNftForm({ createNFT }) {
           id="description"
           onChange={(e) => setDesc(e.target.value)}
           placeholder="description"
-          className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+          value={desc}
+          className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 outline-none px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
         />
       </div>
       <div className="flex flex-col gap-2 justify-center">
@@ -282,7 +304,8 @@ export default function newNftForm({ createNFT }) {
               id="Facebook"
               placeholder="Price"
               onChange={(e) => setPrice(e.target.value)}
-              className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+              value={price}
+              className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
         </div>
@@ -303,7 +326,8 @@ export default function newNftForm({ createNFT }) {
               id="Twitter"
               placeholder="Royalties"
               onChange={(e) => setRoyal(e.target.value)}
-              className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+              value={royal}
+              className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
         </div>
@@ -324,7 +348,8 @@ export default function newNftForm({ createNFT }) {
               id="Instagram"
               placeholder="Size"
               onChange={(e) => setSize(e.target.value)}
-              className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+              value={size}
+              className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
         </div>
@@ -345,16 +370,18 @@ export default function newNftForm({ createNFT }) {
               id="Instagram2"
               placeholder="Propertie"
               onChange={(e) => setPropertie(e.target.value)}
-              className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+              value={propertie}
+              className="bg-transparent py-1 outline-none placeholder:opacity-50 placeholder:text-[#ECDFCC]"
             />
           </label>
         </div>
       </div>
       <button
         onClick={handleSubmit}
+        disabled={isLoading}
         className="bg-[#ECDFCC] text-[#181C14] rounded-[10px] px-4 py-2 font-bold mb-[3rem]"
       >
-        Upload
+        {isLoading === false ? "Upload" : "Uploading..."}
       </button>
     </div>
   );

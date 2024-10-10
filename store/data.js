@@ -4,40 +4,56 @@ import Abi from "./abi.json";
 const initialState = {
   contractAddress: "0x24551a77fb18442abe59C357980955f78ABd4787",
   contractAbi: Abi.abi,
+  SellNft: [],
+  MyNft: [],
+  MySellNft: [],
 };
 
-export const getApiData = createAsyncThunk("callTitle", async (_, thunkAPI) => {
-  try {
-    const response = await fetch(``);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue("Error Fetch Channels Info");
+export const fetchMySellNft = createAsyncThunk(
+  "datas/fetchMySellNft",
+  async (contract) => {
+    const list = await contract.fetchItemsListed();
+    return list.map((tx) => ({
+      tokenId: tx.tokenId.toString(),
+      owner: tx.owner,
+      seller: tx.seller,
+      price: tx.price.toString(),
+      name: tx.name,
+      description: tx.description,
+      collectionType: tx.collectionType,
+      imageURI: tx.imageURI,
+      sold: tx.sold,
+    }));
   }
-});
+);
 
 const datas = createSlice({
   name: "Datas",
   initialState,
   reducers: {
-    setData: (state, { payload }) => {
-      state.stateData.data = payload;
+    setSellNft: (state, { payload }) => {
+      state.SellNft = payload;
+    },
+    setMyNft: (state, { payload }) => {
+      state.MyNft = payload;
+    },
+    setMySellNft: (state, { payload }) => {
+      state.MySellNft = payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getApiData.pending, (state) => {
-        state.stateData.isLoading = true;
+      .addCase(fetchMySellNft.pending, (state) => {
+        // Optionally handle loading state
       })
-      .addCase(getApiData.fulfilled, (state, { payload }) => {
-        state.stateData.isLoading = false;
-        state.stateData.data = payload;
+      .addCase(fetchMySellNft.fulfilled, (state, action) => {
+        state.MySellNft = action.payload; // Set the fetched NFTs
       })
-      .addCase(getApiData.rejected, (state) => {
-        state.stateData.isLoading = false;
+      .addCase(fetchMySellNft.rejected, (state, action) => {
+        console.error("Error fetching my sell NFT: ", action.payload);
       });
   },
 });
 
-export const { setData } = datas.actions;
+export const { setMyNft, setSellNft, setMySellNft } = datas.actions;
 export default datas.reducer;

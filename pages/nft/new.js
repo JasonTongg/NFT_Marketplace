@@ -65,6 +65,8 @@ export default function index() {
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const connectEthereumWallet = async () => {
     try {
       const instance = await web3Modal.open();
@@ -140,7 +142,6 @@ export default function index() {
     description,
     collectionType
   ) => {
-    alert("Creating NFT");
     if (contract) {
       try {
         const value = ethers.parseEther("0.000025");
@@ -154,6 +155,11 @@ export default function index() {
         );
         contract.on("MarketItemCreate", () => {
           toast.success(`Your new NFT has been created successfully`);
+          toast.success(`You will be redirected to the home page`);
+          setIsLoading(false);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 5000);
         });
       } catch (error) {
         console.error("Error Transfer Token: ", error);
@@ -202,7 +208,13 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      <NewNftForm createNFT={createNFT} />
+      <NewNftForm
+        createNFT={createNFT}
+        address={address}
+        toast={toast}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      />
       <ToastContainer />
     </div>
   );

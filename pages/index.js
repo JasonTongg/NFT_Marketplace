@@ -10,7 +10,7 @@ import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Hero from "../components/hero";
 import HowToBuy from "../components/howToBuy";
 import HomeNftDetails from "../components/homeNftDetail";
@@ -18,6 +18,12 @@ import TopCreator from "../components/topCreator";
 import FeaturedNft from "../components/featuredNft";
 import CategoryList from "../components/categoryList";
 import NeverMiss from "../components/neverMiss";
+import {
+  setMyNft,
+  setMySellNft,
+  setSellNft,
+  fetchMySellNft,
+} from "../store/data";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -64,6 +70,7 @@ function useEthereumWallet() {
 }
 
 export default function index() {
+  const dispatch = useDispatch();
   const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
   const { contractAddress, contractAbi } = useSelector((state) => state.data);
@@ -72,6 +79,8 @@ export default function index() {
   const [contract, setContract] = useState();
 
   const [NFTs, setNFTs] = useState([]);
+  const [myNfts, setMyNfts] = useState([]);
+  const [mySellNft, setMySellNft] = useState([]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -96,7 +105,7 @@ export default function index() {
       try {
         const list = await contract.fetchMarketItem();
         const formattedList = list.map((tx) => ({
-          tokenId: tx.tokenId,
+          tokenId: tx.tokenId.toString(),
           owner: tx.owner,
           seller: tx.seller,
           price: tx.price.toString(),
@@ -108,66 +117,43 @@ export default function index() {
         }));
 
         setNFTs(formattedList);
-        console.log(formattedList);
+        dispatch(setSellNft(formattedList));
       } catch (error) {
         console.error("Error Get Market NFT: ", error);
       }
     }
   };
 
-  //   const getHolderData = async () => {
-  //     if (contract) {
-  //       try {
-  //         const allTokenHolder = await contract.getTokenHolder();
-  //         let tempHolderArray = []; // Temporary array to store data
+  const getMyNft = async (address) => {
+    if (contract) {
+      try {
+        const list = await contract.fetchMyNFT(address);
+        const formattedList = list.map((tx) => ({
+          tokenId: tx.tokenId.toString(),
+          owner: tx.owner,
+          seller: tx.seller,
+          price: tx.price.toString(),
+          name: tx.name,
+          description: tx.description,
+          collectionType: tx.collectionType,
+          imageURI: tx.imageURI,
+          sold: tx.sold,
+        }));
 
-  //         await Promise.all(
-  //           allTokenHolder.map(async (item) => {
-  //             const singleHolderData = await contract.getTokenHolderData(item);
-  //             const formattedData = {
-  //               _tokenId: singleHolderData[0],
-  //               _to: singleHolderData[1],
-  //               _from: singleHolderData[2],
-  //               _totalToken: singleHolderData[3],
-  //               _tokenHolder: singleHolderData[4],
-  //             };
-  //             tempHolderArray.push(formattedData);
-  //           })
-  //         );
-
-  //         setHolderArray(tempHolderArray); // Set state once after loop
-  //       } catch (error) {
-  //         console.error("Error Get Transaction Count: ", error);
-  //       }
-  //     }
-  //   };
-
-  //   const transferToken = async () => {
-  //     if (contract) {
-  //       try {
-  //         const transfer = await contract.transfer(
-  //           inputAddress,
-  //           BigInt(+inputValue)
-  //         );
-  //         contract.on("Transfer", (from, to, value) => {
-  //           toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
-  //           getHolderData();
-  //         });
-  //       } catch (error) {
-  //         console.error("Error Transfer Token: ", error);
-  //       }
-  //     }
-  //   };
+        setMyNfts(formattedList);
+        dispatch(setMyNft(formattedList));
+      } catch (error) {
+        console.error("Error Get Market NFT: ", error);
+      }
+    }
+  };
 
   const connectContract = async () => {
     try {
       if (isConnected && contract) {
-        // getHolderData();
-        // console.log("Address: " + address);
-        // const allTokenHolder = await contract.balanceOf(address);
-        // setAccountBalance(Number(allTokenHolder));
-        // console.log("account balance: " + Number(allTokenHolder));
         getMarkeNft();
+        getMyNft(address);
+        dispatch(fetchMySellNft(contract));
       }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();
