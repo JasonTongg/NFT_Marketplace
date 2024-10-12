@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Abi from "./abi.json";
+import AccountAbi from "./accountAbi.json";
 
 const initialState = {
   contractAddress: "0x24551a77fb18442abe59C357980955f78ABd4787",
   contractAbi: Abi.abi,
+  accountContractAddress: "0x88c99E1EEe62C7e04ee713373e402753D07c22aB",
+  accountContracAbi: AccountAbi.abi,
   SellNft: [],
   MyNft: [],
   MySellNft: [],
