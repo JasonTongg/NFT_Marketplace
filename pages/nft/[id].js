@@ -22,6 +22,8 @@ import Profile from "../../public/profile.svg";
 import { MdVerified } from "react-icons/md";
 import { MdOutlineTimer } from "react-icons/md";
 import { MdOutlineLocalOffer } from "react-icons/md";
+import { useRouter } from "next/router";
+import { Skeleton } from "@mui/material";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -74,6 +76,16 @@ export default function index() {
 
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
+
+  const SellNft = useSelector((state) => state.data.SellNft);
+  const [nftList, setNftList] = useState([]);
+  const router = useRouter();
+  const id = router.query.id;
+
+  useEffect(() => {
+    setNftList(SellNft.filter((nft) => nft.tokenId === id));
+    console.log(SellNft.filter((nft) => nft.tokenId === id));
+  }, [SellNft]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -204,15 +216,25 @@ export default function index() {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-8 py-8 items-start content-start">
         <div className="rounded-[10px] overflow-hidden w-full flex flex-col items-center justify-center gap-4">
-          <div
-            className="bg-no-repeat bg-cover bg-center relative w-full h-[500px]"
-            style={{ backgroundImage: `url('${Nft1.src}')` }}
-          >
-            <div className="bg-[#ECDFCC] cursor-pointer absolute top-[20px] right-[20px] flex items-center justify-center gap-2 rounded-[100px] px-4 py-1 text-[#181C14]">
-              <IoIosHeartEmpty />
-              <p>23</p>
+          {nftList?.length > 0 ? (
+            <div
+              className="bg-no-repeat bg-cover bg-center relative w-full h-[500px]"
+              style={{ backgroundImage: `url('${nftList[0]?.imageURI}')` }}
+            >
+              <div className="bg-[#ECDFCC] cursor-pointer absolute top-[20px] right-[20px] flex items-center justify-center gap-2 rounded-[100px] px-4 py-1 text-[#181C14]">
+                <IoIosHeartEmpty />
+                <p>23</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              className="w-full h-[500px]"
+              sx={{ bgcolor: "grey.300", borderRadius: "20px" }}
+              width={700}
+              height={500}
+            />
+          )}
           <Accordion defaultExpanded sx={{ background: "transparent" }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -232,11 +254,7 @@ export default function index() {
                 color: "#ECDFCC",
               }}
             >
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+              <Typography>{nftList[0]?.description || ""}</Typography>
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -263,19 +281,26 @@ export default function index() {
             >
               <Typography>2000 x 200px.IMAGE(685px)</Typography>
               <Typography>Contract ADdress: 0x00000</Typography>
-              <Typography>Token ID: 11</Typography>
+              <Typography>Token ID: {nftList[0]?.tokenId || ""}</Typography>
             </AccordionDetails>
           </Accordion>
         </div>
         <div className="w-full flex flex-col gap-6">
-          <h1 className="text-4xl sm:text-5xl font-bold">Time Traval #11</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold">
+            {nftList[0]?.name || ""} #{nftList[0]?.tokenId || ""}
+          </h1>
           <div className="flex items-center gap-6">
             <div className="flex items-center justify-center gap-2">
               <Image src={Profile} alt="profile" className="w-[40px]" />
               <div className="flex flex-col justify-center">
-                <p className="text-sm">Creator</p>
+                <p className="text-sm">Seller</p>
                 <p className="flex items-center gap-1 font-bold">
-                  Jason <MdVerified />
+                  {nftList?.length > 0
+                    ? nftList[0]?.seller?.substring(0, 3) +
+                      "..." +
+                      nftList[0]?.seller?.substr(-3)
+                    : ""}{" "}
+                  <MdVerified />
                 </p>
               </div>
             </div>
@@ -285,7 +310,7 @@ export default function index() {
               <div className="flex flex-col justify-center">
                 <p className="text-sm">Collection</p>
                 <p className="flex items-center gap-1 font-bold">
-                  Monkey App <MdVerified />
+                  {nftList[0]?.collectionType} <MdVerified />
                 </p>
               </div>
             </div>
@@ -314,9 +339,14 @@ export default function index() {
           </div>
           <div className="flex items-center w-fit gap-2 border-[2px] border-[#ECDFCC] rounded-[10px] py-2 px-4">
             <div className="bg-[#ECDFCC] rounded-[10px] py-1 px-4 text-[#181C14]">
-              Current Bid
+              Current Price
             </div>
-            <p>0.0003 Sepolia ETH</p>
+            <p>
+              {nftList?.length > 0
+                ? ethers.formatUnits(BigInt(nftList[0]?.price), "gwei")
+                : 0}{" "}
+              SepoliaETH
+            </p>
           </div>
           <div className="flex items-center gap-8">
             <p>YOU CANT BUY YOUR OWN NFT</p>

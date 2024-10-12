@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import Nft1 from "../../public/NFT1.png";
+import { useRouter } from "next/router";
+import { Skeleton } from "@mui/material";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -65,6 +67,16 @@ export default function index() {
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
   const [price, setPrice] = useState(0);
+
+  const SellNft = useSelector((state) => state.data.SellNft);
+  const [nftList, setNftList] = useState([]);
+  const router = useRouter();
+  const id = router.query.id;
+
+  useEffect(() => {
+    setNftList(SellNft.filter((nft) => nft.tokenId === id));
+    console.log(SellNft.filter((nft) => nft.tokenId === id));
+  }, [SellNft]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -209,7 +221,23 @@ export default function index() {
             className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
           />
         </div>
-        <Image src={Nft1} alt="nft1" className="w-[250px] rounded-[15px]" />
+        {nftList?.length > 0 ? (
+          <Image
+            src={nftList[0]?.imageURI}
+            alt="nft1"
+            className="w-[250px] !h-auto rounded-[15px]"
+            width={250}
+            height={400}
+          />
+        ) : (
+          <Skeleton
+            variant="rectangular"
+            className="w-[250px] !h-auto"
+            sx={{ bgcolor: "grey.300", borderRadius: "20px" }}
+            width={250}
+            height={700}
+          />
+        )}
         <button className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]">
           Resell NFT
         </button>

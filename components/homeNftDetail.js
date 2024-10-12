@@ -17,6 +17,10 @@ export default function HomeNftDetails() {
   const SellNft = useSelector((state) => state.data.SellNft);
   const [nftList, setNftList] = useState([]);
 
+  useEffect(() => {
+    setNftList(SellNft);
+  }, [SellNft]);
+
   const [active, setActive] = useState(0);
 
   const nextSlide = () => {
@@ -28,11 +32,6 @@ export default function HomeNftDetails() {
   const prevSlide = () => {
     setActive(active - 1 < 0 ? 0 : active - 1);
   };
-
-  useEffect(() => {
-    setNftList(SellNft);
-    console.log(SellNft);
-  }, [SellNft]);
 
   return (
     <div className="w-full flex items-center justify-center my-8 lg:flex-row flex-col-reverse">
@@ -95,13 +94,13 @@ export default function HomeNftDetails() {
         <div className="w-full h-[2px] bg-[#3C3D37]"></div>
         <div className="w-full flex items-center justify-center gap-8">
           <Link
-            href="/nft/ascasc"
+            href={`/nft/${nftList[active]?.tokenId}`}
             className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]"
           >
             Place
           </Link>
           <Link
-            href="/nft/sdcsd"
+            href={`/nft/${nftList[active]?.tokenId}`}
             className="bg-[#ECDFCC] text-[#181C14] px-6 py-2 rounded-[100px]"
           >
             View
@@ -135,7 +134,12 @@ export default function HomeNftDetails() {
             height={700}
           ></Image>
         ) : (
-          <Skeleton variant="rectangular" width={700} height={700} />
+          <Skeleton
+            variant="rectangular"
+            sx={{ bgcolor: "grey.300", borderRadius: "20px" }}
+            width={700}
+            height={700}
+          />
         )}
       </div>
     </div>

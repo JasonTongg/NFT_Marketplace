@@ -4,6 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "@mui/material/Skeleton";
 import { useSelector } from "react-redux";
+import Sport from "../public/SPORT.png";
+import Art from "../public/ART.png";
+import Gaming from "../public/GAMING.png";
+import Photography from "../public/PHOTOGRAPHY.png";
+import Fashion from "../public/FASHION.png";
+import Animal from "../public/ANIMAL.png";
 
 export default function categoryList() {
   const SellNft = useSelector((state) => state.data.SellNft);
@@ -30,6 +36,16 @@ export default function categoryList() {
     setCount(collectionCount);
   }, [SellNft]);
 
+  const getImage = (type) => {
+    console.log(type);
+    if (type === "Animal") return Animal;
+    else if (type === "Sport") return Sport;
+    else if (type === "Gaming") return Gaming;
+    else if (type === "Art") return Art;
+    else if (type === "Photography") return Photography;
+    else if (type === "Fashion") return Fashion;
+  };
+
   return (
     <div className="flex flex-col justify-center gap-4 w-full">
       <h2 className="text-4xl sm:text-5xl font-bold">Browse by Category</h2>
@@ -44,20 +60,17 @@ export default function categoryList() {
           (item, index) => (
             <Link
               key={index}
-              href="/collection/sds"
+              href={`/collection/${item}`.toLowerCase()}
               className="flex flex-col items-center justify-center gap-3 w-full"
             >
               <Image
-                src={Nft1}
+                src={getImage(item)}
                 alt="category"
                 className="w-full h-[200px] object-cover rounded-[5px]"
               />
-              <div className="flex items-center gap-3 w-full justify-center">
-                <div className="w-[40px] h-[40px] rounded-[300px] bg-[#ECDFCC]"></div>
-                <div className="flex flex-col justify-center">
-                  <h4 className="font-bold text-xl">{item}</h4>
-                  <p className="text-md">{count[item] || 0} NFTs</p>
-                </div>
+              <div className="flex items-center justify-center w-full gap-4">
+                <h4 className="font-bold text-xl">{item}</h4>
+                <p className="text-md">{count[item] || 0} NFTs</p>
               </div>
             </Link>
           )

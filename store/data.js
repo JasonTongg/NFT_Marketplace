@@ -7,6 +7,7 @@ const initialState = {
   SellNft: [],
   MyNft: [],
   MySellNft: [],
+  SellNftLoading: true,
 };
 
 export const fetchMySellNft = createAsyncThunk(
@@ -40,6 +41,9 @@ const datas = createSlice({
     setMySellNft: (state, { payload }) => {
       state.MySellNft = payload;
     },
+    setSellNftLoading: (state, { payload }) => {
+      state.SellNftLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,5 +59,6 @@ const datas = createSlice({
   },
 });
 
-export const { setMyNft, setSellNft, setMySellNft } = datas.actions;
+export const { setMyNft, setSellNft, setMySellNft, setSellNftLoading } =
+  datas.actions;
 export default datas.reducer;

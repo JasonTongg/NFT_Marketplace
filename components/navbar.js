@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LiaEthereum } from "react-icons/lia";
 import { IoSearch } from "react-icons/io5";
 import Link from "next/link";
@@ -6,6 +6,8 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -22,11 +24,20 @@ export default function navbar({
   connectWallet,
   openAddress,
 }) {
+  useEffect(() => {
+    if (isConnected) {
+      toast.success("Wallet Connected Successfully");
+    } else {
+      toast.error("Wallet Connection Failed");
+      toast.error("Please try again");
+    }
+  }, []);
   return (
     <div className="w-full py-4 flex items-center justify-center sm:justify-between gap-4">
       <Link href="/" className="sm:block hidden">
         <LiaEthereum className="text-5xl" />
       </Link>
+      <ToastContainer></ToastContainer>
       <div className="flex items-center justify-between sm:justify-center gap-4 xs:gap-12">
         <HtmlTooltip
           title={

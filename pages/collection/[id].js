@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import CollectionDetail from "@/components/collectionDetail";
 import CollectionList from "../../components/collectionList";
 import NeverMiss from "@/components/neverMiss";
+import { useRouter } from "next/router";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -63,6 +64,25 @@ export default function index() {
   const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
   const { contractAddress, contractAbi } = useSelector((state) => state.data);
+
+  const SellNft = useSelector((state) => state.data.SellNft);
+  const [nftList, setNftList] = useState([]);
+  const router = useRouter();
+  const id = router.query.id;
+
+  useEffect(() => {
+    setNftList(
+      SellNft.filter(
+        (nft) => nft.collectionType.toLowerCase() === id.toLowerCase()
+      )
+    );
+    console.log(
+      SellNft.filter(
+        (nft) => nft.collectionType.toLowerCase() === id.toLowerCase()
+      )
+    );
+    console.log(SellNft);
+  }, [SellNft]);
 
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
@@ -194,8 +214,8 @@ export default function index() {
         connectWallet={connectEthereumWallet}
         openAddress={openModal}
       />
-      <CollectionDetail />
-      <CollectionList />
+      <CollectionDetail nftList={nftList} />
+      <CollectionList nftList={nftList} />
       {/* <NeverMiss /> */}
     </div>
   );

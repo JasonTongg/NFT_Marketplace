@@ -18,6 +18,8 @@ import { LuTimer } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import debounce from "lodash/debounce";
+import { useRouter } from "next/router";
+import { Skeleton } from "@mui/material";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -73,6 +75,15 @@ export default function index() {
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("NFTs");
+
+  const SellNft = useSelector((state) => state.data.SellNft);
+  const SellNftLoading = useSelector((state) => state.data.SellNftLoading);
+  const [nftList, setNftList] = useState([]);
+
+  useEffect(() => {
+    setNftList(SellNft);
+    console.log("Sell NFT: " + SellNft);
+  }, [SellNft]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -182,12 +193,31 @@ export default function index() {
     }
   };
 
-  const handleSearch = () => {
-    console.log("Searching...");
+  const debouncedHandleSearch = () => {
+    console.log(search);
+    if (category !== "NFTs") {
+      setNftList(
+        SellNft.filter(
+          (nft) =>
+            nft.name.toLowerCase().includes(search.toLowerCase()) &&
+            nft.collectionType.toLowerCase() === category.toLowerCase()
+        )
+      );
+    } else {
+      setNftList(
+        SellNft.filter((nft) =>
+          nft.name.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
   };
 
+  useEffect(() => {
+    debouncedHandleSearch();
+  }, [search, category]);
+
   // Debounce the handleSearch function
-  const debouncedHandleSearch = useCallback(debounce(handleSearch, 300), []);
+  // const debouncedHandleSearch = useCallback(debounce(handleSearch, 300), []);
 
   useEffect(() => {
     if (isConnected) {
@@ -218,7 +248,6 @@ export default function index() {
           <input
             onChange={(e) => {
               setSearch(e.target.value);
-              debouncedHandleSearch();
             }}
             type="text"
             placeholder="Type your keyword..."
@@ -228,51 +257,26 @@ export default function index() {
           <MdKeyboardDoubleArrowRight className="text-2xl" />
         </label>
         <div className="flex items-center gap-x-16 gap-y-3 my-8 flex-wrap">
-          <p
-            onClick={() => setCategory("NFTs")}
-            style={{
-              color: `${category === "NFTs" ? "#ECDFCC" : "#697565"}`,
-            }}
-            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
-          >
-            NFTs
-          </p>
-          <p
-            onClick={() => setCategory("Arts")}
-            style={{
-              color: `${category === "Arts" ? "#ECDFCC" : "#697565"}`,
-            }}
-            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center transition-all"
-          >
-            Arts
-          </p>
-          <p
-            onClick={() => setCategory("Musics")}
-            style={{
-              color: `${category === "Musics" ? "#ECDFCC" : "#697565"}`,
-            }}
-            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
-          >
-            Musics
-          </p>
-          <p
-            onClick={() => setCategory("Sports")}
-            style={{
-              color: `${category === "Sports" ? "#ECDFCC" : "#697565"}`,
-            }}
-            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
-          >
-            Sports
-          </p>
-          <p
-            onClick={() => setCategory("Photographies")}
-            style={{
-              color: `${category === "Photographies" ? "#ECDFCC" : "#697565"}`,
-            }}
-            className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
-          >
-            Photographies
-          </p>
+          {[
+            "NFTs",
+            "Animal",
+            "Sport",
+            "Gaming",
+            "Art",
+            "Photography",
+            "Fashion",
+          ].map((item, index) => (
+            <p
+              onClick={() => setCategory(item)}
+              style={{
+                color: `${category === item ? "#ECDFCC" : "#697565"}`,
+              }}
+              key={index}
+              className="cursor-pointer font-bold text-lg min-w-[100px] md:text-start text-center"
+            >
+              {item}
+            </p>
+          ))}
         </div>
         <div
           className="grid gap-x-6 gap-y-12"
@@ -280,46 +284,70 @@ export default function index() {
             gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
           }}
         >
-          {Array.from({ length: 15 }).map((item, index) => (
-            <Link
-              href="/nft/sadkjn"
-              className="flex flex-col items-center justify-center gap-4"
-            >
-              <div
+          {SellNftLoading === false ? (
+            nftList?.length > 0 ? (
+              nftList.map((item, index) => (
+                <Link
+                  href={`/nft/${item?.tokenId}`}
+                  className="flex flex-col items-center justify-start gap-4"
+                  key={index}
+                >
+                  <div
+                    className="rounded-[20px] object-cover relative w-full h-[200px] bg-no-repeat bg-cover bg-center"
+                    style={{ backgroundImage: `url('${item?.imageURI}')` }}
+                  >
+                    <div className="px-4 py-1 rounded-[20px] absolute top-[10px] right-[10px] flex items-center justify-center gap-2 bg-[#ECDFCC] text-[#181C14]">
+                      <FaRegHeart />
+                      <p>22</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between gap-2 w-full">
+                    <div className="flex items-center justify-center gap-1">
+                      {Array.from({ length: 4 }).map((_, index) => (
+                        <div
+                          key={index}
+                          className="bg-no-repeat bg-cover bg-center border-[2px] border-[#ECDFCC] rounded-[100px] w-[20px] h-[20px]"
+                          style={{ backgroundImage: `url('${Profile.src}')` }}
+                        ></div>
+                      ))}
+                    </div>
+                    <p>50</p>
+                  </div>
+                  <h2 className="text-2xl font-bold w-full">{item?.name}</h2>
+                  <div className="p-2 rounded-[10px] border-[2px] border-[#ECDFCC] flex items-center justify-center w-full gap-3">
+                    <div className="text-center rounded-[10px] bg-[#ECDFCC] py-1 px-4 text-[#181C14]">
+                      Current Bid
+                    </div>
+                    <p className="text-center">
+                      {item?.price
+                        ? ethers.formatUnits(BigInt(item?.price), "gwei")
+                        : 0}{" "}
+                      SepoliaETH
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center gap-2">
+                    <LuTimer />
+                    <p>2 hours left</p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="min-h-[200px] flex items-center justify-center">
+                Sorry, no NFTs were found. Please check back later or try
+                searching a different NFTs.
+              </p>
+            )
+          ) : (
+            Array.from({ length: 8 }).map((_, index) => (
+              <Skeleton
                 key={index}
-                className="rounded-[20px] object-cover relative w-full h-[200px] bg-no-repeat bg-cover bg-center"
-                style={{ backgroundImage: `url('${Nft1.src}')` }}
-              >
-                <div className="px-4 py-1 rounded-[20px] absolute top-[10px] right-[10px] flex items-center justify-center gap-2 bg-[#ECDFCC] text-[#181C14]">
-                  <FaRegHeart />
-                  <p>22</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between gap-2 w-full">
-                <div className="flex items-center justify-center gap-1">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="bg-no-repeat bg-cover bg-center border-[2px] border-[#ECDFCC] rounded-[100px] w-[20px] h-[20px]"
-                      style={{ backgroundImage: `url('${Profile.src}')` }}
-                    ></div>
-                  ))}
-                </div>
-                <p>50</p>
-              </div>
-              <h2 className="text-2xl font-bold w-full">Time Traval</h2>
-              <div className="p-2 rounded-[10px] border-[2px] border-[#ECDFCC] flex items-center justify-center w-full gap-3">
-                <div className="text-center rounded-[10px] bg-[#ECDFCC] py-1 px-4 text-[#181C14]">
-                  Current Bid
-                </div>
-                <p className="text-center">0.002 SepoliaETH</p>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <LuTimer />
-                <p>2 hours left</p>
-              </div>
-            </Link>
-          ))}
+                variant="rectangular !w-full !h-[200px]"
+                width={700}
+                sx={{ bgcolor: "grey.300", borderRadius: "10px" }}
+                height={200}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

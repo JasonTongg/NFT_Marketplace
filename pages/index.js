@@ -75,12 +75,7 @@ export default function index() {
     useEthereumWallet();
   const { contractAddress, contractAbi } = useSelector((state) => state.data);
 
-  const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
-
-  const [NFTs, setNFTs] = useState([]);
-  const [myNfts, setMyNfts] = useState([]);
-  const [mySellNft, setMySellNft] = useState([]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -100,60 +95,9 @@ export default function index() {
     }
   };
 
-  const getMarkeNft = async () => {
-    if (contract) {
-      try {
-        const list = await contract.fetchMarketItem();
-        const formattedList = list.map((tx) => ({
-          tokenId: tx.tokenId.toString(),
-          owner: tx.owner,
-          seller: tx.seller,
-          price: tx.price.toString(),
-          name: tx.name,
-          description: tx.description,
-          collectionType: tx.collectionType,
-          imageURI: tx.imageURI,
-          sold: tx.sold,
-        }));
-
-        setNFTs(formattedList);
-        dispatch(setSellNft(formattedList));
-      } catch (error) {
-        console.error("Error Get Market NFT: ", error);
-      }
-    }
-  };
-
-  const getMyNft = async (address) => {
-    if (contract) {
-      try {
-        const list = await contract.fetchMyNFT(address);
-        const formattedList = list.map((tx) => ({
-          tokenId: tx.tokenId.toString(),
-          owner: tx.owner,
-          seller: tx.seller,
-          price: tx.price.toString(),
-          name: tx.name,
-          description: tx.description,
-          collectionType: tx.collectionType,
-          imageURI: tx.imageURI,
-          sold: tx.sold,
-        }));
-
-        setMyNfts(formattedList);
-        dispatch(setMyNft(formattedList));
-      } catch (error) {
-        console.error("Error Get Market NFT: ", error);
-      }
-    }
-  };
-
   const connectContract = async () => {
     try {
       if (isConnected && contract) {
-        getMarkeNft();
-        getMyNft(address);
-        dispatch(fetchMySellNft(contract));
       }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();
