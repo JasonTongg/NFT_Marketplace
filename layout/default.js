@@ -13,6 +13,9 @@ import {
   setMyNftLoading,
   setIsConnected,
   setAddress,
+  setTopCreator,
+  setFollowingAccount,
+  setFollowingAccountLoading,
 } from "../store/data";
 import { ethers } from "ethers";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
@@ -179,12 +182,75 @@ export default function Default({ children }) {
     }
   };
 
+  const getTopCreators = async () => {
+    if (contract) {
+      try {
+        const list = [
+          "0x56E4CC7312BF3C0686D119c2b99FBc41CfbF25C7",
+          "0xFD8FD5Ba205Bbc3a4795134A4d43B24d1d40Cb2E",
+          "0xBbEbCA0F95528B8A2cF115dfB699fd7b317AFF9e",
+        ];
+        const result = [];
+        for (let i = 0; i < 3; i++) {
+          const details = await contractAcc.getAccountDetails(list[i]);
+          const formattedDetails = {
+            name: details.name,
+            accountAddress: details.accountAddress,
+            description: details.description,
+            twitter: details.twitter,
+            telegram: details.telegram,
+            instagram: details.instagram,
+            imageURI: details.imageURI,
+            email: details.email,
+            website: details.website,
+            isAuthor: details.isAuthor,
+          };
+          result.push(formattedDetails);
+        }
+        dispatch(setTopCreator(result));
+      } catch (error) {
+        console.error("Error Get Account Details: ", error);
+      }
+    }
+  };
+
+  const followingAccounts = async (address) => {
+    if (contract) {
+      try {
+        dispatch(setFollowingAccountLoading(true));
+        let index = 0;
+        while (true) {
+          console.log("index: " + index);
+          const following = await contractAcc.followingAccounts(address, index);
+          console.log(following.name);
+          if (!following || following.name === "") {
+            console.log("done");
+          }
+          const formattedList = {
+            accountAddress: following.accountAddress,
+            imageURI: following.imageURI,
+            name: following.name,
+            followers: following.followers.toString(),
+          };
+          dispatch(setFollowingAccount(formattedList));
+          index++;
+          dispatch(setFollowingAccountLoading(false));
+        }
+      } catch (error) {
+        console.error("Error Get Following Account: ", error);
+        dispatch(setFollowingAccountLoading(false));
+      }
+    }
+  };
+
   const connectContract = async () => {
     try {
       if (isConnected && contract) {
         getMarkeNft();
         getMyNft(address);
         dispatch(fetchMySellNft(contract));
+        getTopCreators();
+        followingAccounts(address);
       }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();

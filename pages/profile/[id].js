@@ -224,6 +224,7 @@ export default function index() {
         }
       } catch (error) {
         console.error("Error Get Account Details: ", error);
+        router.push(`/notfound`);
       }
     }
   };

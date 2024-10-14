@@ -76,12 +76,6 @@ export default function index() {
         (nft) => nft.collectionType.toLowerCase() === id.toLowerCase()
       )
     );
-    console.log(
-      SellNft.filter(
-        (nft) => nft.collectionType.toLowerCase() === id.toLowerCase()
-      )
-    );
-    console.log(SellNft);
   }, [SellNft]);
 
   const [balance, setBalance] = useState(0);

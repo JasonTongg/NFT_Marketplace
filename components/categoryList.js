@@ -37,7 +37,6 @@ export default function categoryList() {
   }, [SellNft]);
 
   const getImage = (type) => {
-    console.log(type);
     if (type === "Animal") return Animal;
     else if (type === "Sport") return Sport;
     else if (type === "Gaming") return Gaming;

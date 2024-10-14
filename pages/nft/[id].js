@@ -84,7 +84,6 @@ export default function index() {
 
   useEffect(() => {
     setNftList(SellNft.filter((nft) => nft.tokenId === id));
-    console.log(SellNft.filter((nft) => nft.tokenId === id));
   }, [SellNft]);
 
   const connectEthereumWallet = async () => {

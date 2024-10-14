@@ -87,8 +87,7 @@ export default function setting() {
   const [facebook, setFacebook] = useState("");
   const [twitter, setTwitter] = useState("");
   const [instagram, setInstagram] = useState("");
-  const [wallet, setWallet] = useState("");
-  const [profileImage, setProfileImage] = useState();
+  const [wallet, setWallet] = useState(address);
   const [isLoading, setIsLoading] = useState("");
 
   const connectEthereumWallet = async () => {
@@ -244,8 +243,7 @@ export default function setting() {
         twitter === "" ||
         instagram === "" ||
         wallet === "" ||
-        files.length === 0 ||
-        profileImage === ""
+        files.length === 0
       ) {
         toast.error("Please fill all the fields");
         return;

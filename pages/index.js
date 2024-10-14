@@ -23,6 +23,10 @@ import {
   setMySellNft,
   setSellNft,
   fetchMySellNft,
+  setFollowingAccount,
+  setFollowerAccount,
+  setFollowerAccountLoading,
+  setFollowingAccountLoading,
 } from "../store/data";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
@@ -73,9 +77,17 @@ export default function index() {
   const dispatch = useDispatch();
   const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
-  const { contractAddress, contractAbi } = useSelector((state) => state.data);
+  const {
+    contractAddress,
+    contractAbi,
+    accountContractAddress,
+    accountContracAbi,
+  } = useSelector((state) => state.data);
 
   const [contract, setContract] = useState();
+  const [contractAcc, setContractAcc] = useState();
+  const [follow, setFollow] = useState([false, false, false]);
+  const [loading, setLoading] = useState([false, false, false]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -95,6 +107,56 @@ export default function index() {
     }
   };
 
+  const followAccount = async (address, name, index) => {
+    if (contract) {
+      try {
+        let temp2 = [...loading];
+        temp2[index] = true;
+        setLoading(temp2);
+        await contractAcc.followAccount(address);
+        contractAcc.on("AccountFollowed", () => {
+          toast.success(`Successfully Followed ${name}`);
+          let temp3 = [...loading];
+          temp3[index] = false;
+          setLoading(temp3);
+          let temp = [...follow];
+          temp[index] = true;
+          setFollow(temp);
+        });
+      } catch (error) {
+        console.error("Error Get Market NFT: ", error);
+        let temp3 = [...loading];
+        temp3[index] = false;
+        setLoading(temp3);
+      }
+    }
+  };
+
+  const unfollowAccount = async (address, name, index) => {
+    if (contract) {
+      try {
+        let temp2 = [...loading];
+        temp2[index] = true;
+        setLoading(temp2);
+        await contractAcc.unfollowAccont(address);
+        contractAcc.on("AccountUnfollowed", () => {
+          toast.success(`Successfully Unfollowed ${name}`);
+          let temp3 = [...loading];
+          temp3[index] = false;
+          setLoading(temp3);
+          let temp = [...follow];
+          temp[index] = false;
+          setFollow(temp);
+        });
+      } catch (error) {
+        console.error("Error Get Market NFT: ", error);
+        let temp3 = [...loading];
+        temp3[index] = false;
+        setLoading(temp3);
+      }
+    }
+  };
+
   const connectContract = async () => {
     try {
       if (isConnected && contract) {
@@ -106,7 +168,13 @@ export default function index() {
           contractAbi,
           await signer
         );
+        const contractAcc = new ethers.Contract(
+          accountContractAddress,
+          accountContracAbi,
+          await signer
+        );
         setContract(contract);
+        setContractAcc(contractAcc);
       }
     } catch (error) {
       toast.error("Please Change to Sepolia Network");
@@ -135,7 +203,13 @@ export default function index() {
       <Hero />
       <HowToBuy />
       <HomeNftDetails />
-      <TopCreator />
+      <TopCreator
+        followAccount={followAccount}
+        unfollowAccount={unfollowAccount}
+        follow={follow}
+        setFollow={setFollow}
+        loading={loading}
+      />
       <FeaturedNft />
       <CategoryList />
       <NeverMiss />

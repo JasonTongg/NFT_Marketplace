@@ -82,7 +82,6 @@ export default function index() {
 
   useEffect(() => {
     setNftList(SellNft);
-    console.log("Sell NFT: " + SellNft);
   }, [SellNft]);
 
   const connectEthereumWallet = async () => {
@@ -194,7 +193,6 @@ export default function index() {
   };
 
   const debouncedHandleSearch = () => {
-    console.log(search);
     if (category !== "NFTs") {
       setNftList(
         SellNft.filter(

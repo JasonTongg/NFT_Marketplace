@@ -5,6 +5,7 @@ import Profile from "../public/profile.svg";
 import { LuTimer } from "react-icons/lu";
 import Link from "next/link";
 import { Skeleton } from "@mui/material";
+import { useSelector } from "react-redux";
 
 export default function profileNftList({
   myNftList,
@@ -15,6 +16,9 @@ export default function profileNftList({
   const [active, setActive] = useState(0);
   const [nftList, setNftList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { followingAccount, followingAccountLoading } = useSelector(
+    (state) => state.data
+  );
 
   useEffect(() => {
     if (active === 0) {
@@ -27,6 +31,10 @@ export default function profileNftList({
       setNftList([]);
     }
   }, [active, nftList, mySellNftList, MyNftLoading, MySellNftLoading]);
+
+  useEffect(() => {
+    console.log("Following: " + followingAccount);
+  }, [followingAccount]);
 
   return (
     <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">

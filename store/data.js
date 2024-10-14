@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Abi from "./abi.json";
 import AccountAbi from "./account.json";
+import topCreator from "@/components/topCreator";
 
 const initialState = {
   contractAddress: "0x24551a77fb18442abe59C357980955f78ABd4787",
@@ -16,6 +17,11 @@ const initialState = {
   toastCount: 0,
   isConnected: false,
   address: "",
+  topCreator: [],
+  followingAccount: [],
+  followingAccountLoading: false,
+  followerAccount: [],
+  followerAccountLoading: false,
 };
 
 export const fetchMySellNft = createAsyncThunk(
@@ -64,6 +70,21 @@ const datas = createSlice({
     setAddress: (state, { payload }) => {
       state.address = payload;
     },
+    setTopCreator: (state, { payload }) => {
+      state.topCreator = payload;
+    },
+    setFollowingAccount: (state, { payload }) => {
+      state.followingAccount = [...state.followingAccount, payload];
+    },
+    setFollowerAccount: (state, { payload }) => {
+      state.followerAccount = [...state.followerAccount, payload];
+    },
+    setFollowerAccountLoading: (state, { payload }) => {
+      state.followerAccountLoading = payload;
+    },
+    setFollowingAccountLoading: (state, { payload }) => {
+      state.followingAccountLoading = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -91,5 +112,10 @@ export const {
   setToastCount,
   setIsConnected,
   setAddress,
+  setTopCreator,
+  setFollowingAccount,
+  setFollowerAccount,
+  setFollowerAccountLoading,
+  setFollowingAccountLoading,
 } = datas.actions;
 export default datas.reducer;
