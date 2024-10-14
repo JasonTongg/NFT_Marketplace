@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import { LiaEthereum } from "react-icons/lia";
 import { IoSearch } from "react-icons/io5";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { setToastCount } from "@/store/data";
 
 const HtmlTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -18,18 +20,19 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function navbar({
-  address,
-  isConnected,
-  connectWallet,
-  openAddress,
-}) {
+export default function navbar({ connectWallet, openAddress, isConnected }) {
+  const dispatch = useDispatch();
+  const toastCount = useSelector((state) => state.data.toastCount);
+  const address = useSelector((state) => state.data.address);
   useEffect(() => {
-    if (isConnected) {
-      toast.success("Wallet Connected Successfully");
-    } else {
-      toast.error("Wallet Connection Failed");
-      toast.error("Please try again");
+    if (toastCount === 0) {
+      if (isConnected) {
+        toast.success("Wallet Connected Successfully");
+      } else {
+        toast.error("Wallet Connection Failed");
+        toast.error("Please try again");
+      }
+      dispatch(setToastCount(1));
     }
   }, []);
   return (
@@ -68,7 +71,9 @@ export default function navbar({
         </Link>
         {isConnected ? (
           <button onClick={openAddress} className="hover-button">
-            {address.substring(0, 5)}...{address.substr(-5)}
+            {address
+              ? address?.substring(0, 5) + "..." + address?.substr(-5)
+              : ""}
           </button>
         ) : (
           <button onClick={connectWallet} className="hover-button">

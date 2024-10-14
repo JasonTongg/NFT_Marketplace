@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import NewNftForm from "../../components/newNftForm";
+import { useRouter } from "next/router";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -66,6 +67,8 @@ export default function index() {
   const [contract, setContract] = useState();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   const connectEthereumWallet = async () => {
     try {
@@ -158,7 +161,7 @@ export default function index() {
           toast.success(`You will be redirected to the home page`);
           setIsLoading(false);
           setTimeout(() => {
-            window.location.href = "/";
+            router.push("/");
           }, 5000);
         });
       } catch (error) {

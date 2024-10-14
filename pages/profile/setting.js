@@ -19,6 +19,8 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { IoWalletOutline } from "react-icons/io5";
 import { MdContentCopy } from "react-icons/md";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -67,10 +69,16 @@ function useEthereumWallet() {
 export default function setting() {
   const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
-  const { contractAddress, contractAbi } = useSelector((state) => state.data);
+  const { accountContractAddress, accountContracAbi } = useSelector(
+    (state) => state.data
+  );
+
+  const router = useRouter();
 
   const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
+  const [files, setFiles] = useState([]);
+  const [details, setDetails] = useState({});
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -81,6 +89,7 @@ export default function setting() {
   const [instagram, setInstagram] = useState("");
   const [wallet, setWallet] = useState("");
   const [profileImage, setProfileImage] = useState();
+  const [isLoading, setIsLoading] = useState("");
 
   const connectEthereumWallet = async () => {
     try {
@@ -100,87 +109,164 @@ export default function setting() {
     }
   };
 
-  // const getTransaction = async () => {
-  //   console.log("Getting Contract");
-  //   if (contract) {
-  //     console.log("There is contract");
-  //     try {
-  //       console.log("Start getting contract");
-  //       const transactions = await contract.getTransactions();
-  //       const formattedTransactions = transactions.map((tx) => ({
-  //         from: tx.from,
-  //         to: tx.to,
-  //         amount: tx.amount.toString(), // Convert BigNumber to string (or .toNumber() if small)
-  //         message: tx.message,
-  //       }));
+  const getAccountDetail = async () => {
+    if (contract) {
+      try {
+        const details = await contract.getAccountDetails(address);
+        const formattedDetails = {
+          name: details.name,
+          accountAddress: details.accountAddress,
+          description: details.description,
+          twitter: details.twitter,
+          telegram: details.telegram,
+          instagram: details.instagram,
+          imageURI: details.imageURI,
+          email: details.email,
+          website: details.website,
+          isAuthor: details.isAuthor,
+        };
+        setName(formattedDetails.name);
+        setDesc(formattedDetails.description);
+        setTwitter(formattedDetails.twitter);
+        setFacebook(formattedDetails.telegram);
+        setInstagram(formattedDetails.instagram);
+        setEmail(formattedDetails.email);
+        setWebsite(formattedDetails.website);
+        setDetails(formattedDetails);
+      } catch (error) {
+        console.error("Error Get Account Details: ", error);
+      }
+    }
+  };
 
-  //       console.log("set Transaction");
-  //       setTransactions(formattedTransactions);
-  //       console.log("set Transaction done");
-  //     } catch (error) {
-  //       console.error("Error Get Transaction: ", error);
-  //     }
-  //   }
-  // };
+  const setAsAuthor = async (imageURI) => {
+    if (contract) {
+      try {
+        await contract.createAccount(
+          name,
+          desc,
+          twitter,
+          facebook,
+          instagram,
+          imageURI,
+          email,
+          website,
+          true
+        );
+        contract.on("AccountCreated", () => {
+          toast.success(`Author has been created successfully`);
+          toast.success(`Redirect to your profile`);
+          setTimeout(() => {
+            router.push(`/profile/${address}`);
+          }, 3000);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        toast.error("Error creating author, please try again");
+        setIsLoading(false);
+      }
+    }
+  };
 
-  //   const getHolderData = async () => {
-  //     if (contract) {
-  //       try {
-  //         const allTokenHolder = await contract.getTokenHolder();
-  //         let tempHolderArray = []; // Temporary array to store data
+  const uploadImage = async (file) => {
+    setIsLoading(true);
+    const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await axios.post(url, formData, {
+        maxBodyLength: "Infinity",
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+          pinata_api_key: process.env.NEXT_PUBLIC_INFURA_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_INFURA_SECRET,
+        },
+      });
+      setAsAuthor(
+        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
+      );
+    } catch (error) {
+      toast.error("Error uploading file, please try again later");
+      setIsLoading(false);
+    }
+  };
 
-  //         await Promise.all(
-  //           allTokenHolder.map(async (item) => {
-  //             const singleHolderData = await contract.getTokenHolderData(item);
-  //             const formattedData = {
-  //               _tokenId: singleHolderData[0],
-  //               _to: singleHolderData[1],
-  //               _from: singleHolderData[2],
-  //               _totalToken: singleHolderData[3],
-  //               _tokenHolder: singleHolderData[4],
-  //             };
-  //             tempHolderArray.push(formattedData);
-  //           })
-  //         );
+  function copyToClipboard(text) {
+    // Check if the Clipboard API is available
+    if (navigator.clipboard) {
+      // Use the Clipboard API to write the text to the clipboard
+      navigator.clipboard
+        .writeText(text)
+        .then(function () {
+          alert("Text copied to clipboard!");
+          toast.success(text + " copied to clipboard!");
+        })
+        .catch(function (error) {
+          toast.error("Failed to copy " + text);
+        });
+    } else {
+      // Fallback method for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      // Make the textarea off-screen
+      textArea.style.position = "fixed";
+      textArea.style.opacity = 0;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
 
-  //         setHolderArray(tempHolderArray); // Set state once after loop
-  //       } catch (error) {
-  //         console.error("Error Get Transaction Count: ", error);
-  //       }
-  //     }
-  //   };
+      try {
+        const successful = document.execCommand("copy");
+        const msg = successful
+          ? text + " copied to clipboard!"
+          : "Failed to copy " + text;
+        if (successful) {
+          toast.success(msg);
+        } else {
+          toast.error(msg);
+        }
+      } catch (err) {
+        // alert("Error in copying text: " + err);
+        toast.error("Failed copying " + text);
+      }
+      document.body.removeChild(textArea);
+    }
+  }
 
-  //   const transferToken = async () => {
-  //     if (contract) {
-  //       try {
-  //         const transfer = await contract.transfer(
-  //           inputAddress,
-  //           BigInt(+inputValue)
-  //         );
-  //         contract.on("Transfer", (from, to, value) => {
-  //           toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
-  //           getHolderData();
-  //         });
-  //       } catch (error) {
-  //         console.error("Error Transfer Token: ", error);
-  //       }
-  //     }
-  //   };
+  const handleSubmit = () => {
+    if (address) {
+      if (
+        name === "" ||
+        email === "" ||
+        desc === "" ||
+        website === "" ||
+        facebook === "" ||
+        twitter === "" ||
+        instagram === "" ||
+        wallet === "" ||
+        files.length === 0 ||
+        profileImage === ""
+      ) {
+        toast.error("Please fill all the fields");
+        return;
+      } else {
+        uploadImage(files[0]);
+      }
+    } else {
+      toast.error("Please connect your wallet first");
+    }
+  };
 
   const connectContract = async () => {
     try {
       if (isConnected && contract) {
-        // getHolderData();
-        // console.log("Address: " + address);
-        // const allTokenHolder = await contract.balanceOf(address);
-        // setAccountBalance(Number(allTokenHolder));
-        // console.log("account balance: " + Number(allTokenHolder));
+        getAccountDetail();
       }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();
         const contract = new ethers.Contract(
-          contractAddress,
-          contractAbi,
+          accountContractAddress,
+          accountContracAbi,
           await signer
         );
         setContract(contract);
@@ -202,7 +288,6 @@ export default function setting() {
 
   return (
     <div className="w-full overflow-hidden px-4 md:px-16 flex flex-col items-center justify-center gap-6">
-      {/* <ToastContainer /> */}
       <Navbar
         address={address}
         isConnected={isConnected}
@@ -223,19 +308,34 @@ export default function setting() {
             for="image"
             className="cursor-pointer flex flex-col items-center justify-center gap-2"
           >
-            <Image src={Profile} alt="profile" className="w-[150px]" />
-            <label for="image">Change image</label>
+            <Image
+              src={
+                details.imageURI
+                  ? details.imageURI
+                  : files.length > 0
+                  ? URL.createObjectURL(files[0])
+                  : Profile
+              }
+              alt="profile"
+              className="w-[150px] h-[150px] rounded-[200px] object-cover"
+              width={150}
+              height={150}
+            />
+            <label for="image" className="cursor-pointer">
+              Change image
+            </label>
             <input
               type="file"
               id="image"
               name="image"
               accept="image/*"
-              onChange={(e) => setProfileImage(e.target.value)}
-              className="invisible hidden"
+              onChange={(e) => {
+                setFiles(e.target.files);
+              }}
+              className="invisible hidden outline-none"
             />
           </label>
           <div className="w-full flex flex-col justify-center gap-6">
-            <button className="hover-button">Set as Author Account</button>
             <div className="flex flex-col gap-2 justify-center">
               <label htmlFor="username" className="font-bold text-xl">
                 Username
@@ -245,7 +345,8 @@ export default function setting() {
                 onChange={(e) => setName(e.target.value)}
                 id="username"
                 placeholder="username"
-                className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+                value={name}
+                className="bg-transparent outline-none border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
               />
             </div>
             <div className="flex flex-col gap-2 justify-center">
@@ -265,7 +366,8 @@ export default function setting() {
                   id="email"
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="email"
-                  className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                  value={email}
+                  className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />
               </label>
             </div>
@@ -279,7 +381,8 @@ export default function setting() {
                 id="description"
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder="description"
-                className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+                value={desc}
+                className="bg-transparent outline-none border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
               />
             </div>
             <div className="flex flex-col gap-2 justify-center">
@@ -299,14 +402,15 @@ export default function setting() {
                   id="website"
                   placeholder="website"
                   onChange={(e) => setWebsite(e.target.value)}
-                  className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                  value={website}
+                  className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />
               </label>
             </div>
             <div
               className="grid gap-2 w-full"
               style={{
-                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
               }}
             >
               <div className="flex flex-col gap-2 justify-center">
@@ -325,8 +429,9 @@ export default function setting() {
                     type="text"
                     id="Facebook"
                     placeholder="Facebook"
+                    value={facebook}
                     onChange={(e) => setFacebook(e.target.value)}
-                    className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                    className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
               </div>
@@ -346,8 +451,9 @@ export default function setting() {
                     type="text"
                     id="Twitter"
                     placeholder="Twitter"
+                    value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
-                    className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                    className="bg-transparent py-1 outline-none placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
               </div>
@@ -367,8 +473,9 @@ export default function setting() {
                     type="text"
                     id="Instagram"
                     placeholder="Instagram"
+                    value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
-                    className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                    className="bg-transparent py-1 outline-none placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                   />
                 </label>
               </div>
@@ -389,20 +496,30 @@ export default function setting() {
                   type="text"
                   id="Wallet"
                   onChange={(e) => setWallet(e.target.value)}
+                  value={address}
+                  readOnly
                   placeholder="Wallet"
-                  className="bg-transparent py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
+                  className="bg-transparent outline-none py-1 placeholder:opacity-50 placeholder:text-[#ECDFCC]"
                 />
-                <div className="bg-[#ECDFCC] flex items-center justify-center text-[#181C14]">
+                <div
+                  className="bg-[#ECDFCC] cursor-pointer flex items-center justify-center text-[#181C14]"
+                  onClick={() => copyToClipboard(address)}
+                >
                   <MdContentCopy className="text-xl" />
                 </div>
               </label>
             </div>
-            <button className="px-4 py-2 rounded-[20px] font-bold w-full bg-[#ECDFCC] text-[#181C14]">
-              Upload Profile
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className="px-4 py-2 rounded-[20px] font-bold w-full bg-[#ECDFCC] text-[#181C14]"
+            >
+              {isLoading === true ? "Uploading..." : "Set as Author"}
             </button>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

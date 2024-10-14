@@ -10,6 +10,9 @@ import {
   setSellNft,
   fetchMySellNft,
   setSellNftLoading,
+  setMyNftLoading,
+  setIsConnected,
+  setAddress,
 } from "../store/data";
 import { ethers } from "ethers";
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
@@ -100,9 +103,15 @@ export default function Default({ children }) {
   const dispatch = useDispatch();
   const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
-  const { contractAddress, contractAbi } = useSelector((state) => state.data);
+  const {
+    contractAddress,
+    contractAbi,
+    accountContractAddress,
+    accountContracAbi,
+  } = useSelector((state) => state.data);
 
   const [contract, setContract] = useState();
+  const [contractAcc, setContractAcc] = useState();
 
   const connectEthereumWallet = async () => {
     try {
@@ -149,6 +158,7 @@ export default function Default({ children }) {
   const getMyNft = async (address) => {
     if (contract) {
       try {
+        dispatch(setMyNftLoading(true));
         const list = await contract.fetchMyNFT(address);
         const formattedList = list.map((tx) => ({
           tokenId: tx.tokenId.toString(),
@@ -162,6 +172,7 @@ export default function Default({ children }) {
           sold: tx.sold,
         }));
         dispatch(setMyNft(formattedList));
+        dispatch(setMyNftLoading(false));
       } catch (error) {
         console.error("Error Get Market NFT: ", error);
       }
@@ -182,7 +193,13 @@ export default function Default({ children }) {
           contractAbi,
           await signer
         );
+        const contractAcc = new ethers.Contract(
+          accountContractAddress,
+          accountContracAbi,
+          await signer
+        );
         setContract(contract);
+        setContractAcc(contractAcc);
       }
     } catch (error) {
       toast.error("Please Change to Sepolia Network");
@@ -193,6 +210,8 @@ export default function Default({ children }) {
     if (isConnected) {
       connectContract();
     }
+    dispatch(setIsConnected(isConnected));
+    dispatch(setAddress(address));
   }, [contract, isConnected]);
 
   return (

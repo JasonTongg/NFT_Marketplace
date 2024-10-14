@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Abi from "./abi.json";
-import AccountAbi from "./accountAbi.json";
+import AccountAbi from "./account.json";
 
 const initialState = {
   contractAddress: "0x24551a77fb18442abe59C357980955f78ABd4787",
@@ -11,6 +11,11 @@ const initialState = {
   MyNft: [],
   MySellNft: [],
   SellNftLoading: true,
+  MyNftLoading: true,
+  MySellNftLoading: true,
+  toastCount: 0,
+  isConnected: false,
+  address: "",
 };
 
 export const fetchMySellNft = createAsyncThunk(
@@ -47,21 +52,44 @@ const datas = createSlice({
     setSellNftLoading: (state, { payload }) => {
       state.SellNftLoading = payload;
     },
+    setMyNftLoading: (state, { payload }) => {
+      state.MyNftLoading = payload;
+    },
+    setToastCount: (state, { payload }) => {
+      state.toastCount = payload;
+    },
+    setIsConnected: (state, { payload }) => {
+      state.isConnected = payload;
+    },
+    setAddress: (state, { payload }) => {
+      state.address = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMySellNft.pending, (state) => {
         // Optionally handle loading state
+        state.MySellNftLoading = true;
       })
       .addCase(fetchMySellNft.fulfilled, (state, action) => {
         state.MySellNft = action.payload; // Set the fetched NFTs
+        state.MySellNftLoading = false;
       })
       .addCase(fetchMySellNft.rejected, (state, action) => {
+        state.MySellNftLoading = false;
         console.error("Error fetching my sell NFT: ", action.payload);
       });
   },
 });
 
-export const { setMyNft, setSellNft, setMySellNft, setSellNftLoading } =
-  datas.actions;
+export const {
+  setMyNft,
+  setSellNft,
+  setMySellNft,
+  setSellNftLoading,
+  setMyNftLoading,
+  setToastCount,
+  setIsConnected,
+  setAddress,
+} = datas.actions;
 export default datas.reducer;
