@@ -28,13 +28,26 @@ export default function profileNftList({
       setNftList(myNftList);
       setIsLoading(MyNftLoading);
     } else {
-      setNftList([]);
+      const filteredData = followingAccount.filter(
+        (item, index, self) =>
+          item.name !== "" &&
+          index ===
+            self.findIndex(
+              (t) =>
+                t.accountAddress === item.accountAddress && t.name === item.name
+            )
+      );
+      console.log(filteredData);
+      setNftList(filteredData);
     }
-  }, [active, nftList, mySellNftList, MyNftLoading, MySellNftLoading]);
-
-  useEffect(() => {
-    console.log("Following: " + followingAccount);
-  }, [followingAccount]);
+  }, [
+    active,
+    nftList,
+    mySellNftList,
+    MyNftLoading,
+    MySellNftLoading,
+    followingAccount,
+  ]);
 
   return (
     <div className="flex flex-col w-full gap-2 justify-center mb-[3rem]">
@@ -69,16 +82,6 @@ export default function profileNftList({
         >
           Following
         </p>
-        <p
-          style={{
-            color: `${active === 3 ? "#181C14" : "#ECDFCC"}`,
-            backgroundColor: `${active === 3 ? "#ECDFCC" : "transparent"}`,
-          }}
-          onClick={() => setActive(3)}
-          className="cursor-pointer rounded-[100px] text-lg px-4 py-2 border-[2px] border-[#ECDFCC]"
-        >
-          Followers
-        </p>
       </div>
       <div
         className="grid gap-x-6 gap-y-12"
@@ -90,9 +93,13 @@ export default function profileNftList({
           nftList?.length > 0 ? (
             nftList.map((item, index) => (
               <Link
-                href={`/nft/${item?.tokenId}`}
+                href={
+                  active !== 2
+                    ? `/nft/${item?.tokenId}`
+                    : `/profile/${item?.accountAddress}`
+                }
                 key={index}
-                className="flex flex-col items-center justify-center gap-4"
+                className="max-w-[400px] flex flex-col items-center justify-center gap-4"
               >
                 <div
                   className="rounded-[20px] object-cover relative w-full h-[200px] bg-no-repeat bg-cover bg-center"

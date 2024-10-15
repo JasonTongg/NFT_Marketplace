@@ -19,6 +19,7 @@ export default function HomeNftDetails() {
 
   useEffect(() => {
     setNftList(SellNft);
+    console.log(SellNft);
   }, [SellNft]);
 
   const [active, setActive] = useState(0);

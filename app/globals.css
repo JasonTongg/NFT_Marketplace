@@ -88,3 +88,7 @@ html::-webkit-scrollbar-thumb {
     grid-template-columns: 1fr;
   }
 }
+
+.MuiList-padding {
+  padding-block: 0 !important;
+}

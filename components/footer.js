@@ -2,7 +2,7 @@ import React from "react";
 import { LiaEthereum } from "react-icons/lia";
 import Link from "next/link";
 
-export default function footer() {
+export default function footer({ address }) {
   return (
     <div className="bg-[#3C3D37] flex flex-col items-center justify-center gap-2 px-16 py-6 w-full">
       <div className=" flex justify-center gap-x-16 gap-y-6 w-full flex-wrap">
@@ -19,7 +19,7 @@ export default function footer() {
           <div className="grid grid-cols-2 gap-2 justify-center justify-items-center">
             {[
               { title: "Search", href: "/search" },
-              { title: "Author Profile", href: "/profile/sdasd" },
+              { title: "Author Profile", href: `/profile/${address}` },
               { title: "Account Setting", href: "/profile/setting" },
               { title: "Upload NFT", href: "/nft/new" },
             ].map((item, index) => (

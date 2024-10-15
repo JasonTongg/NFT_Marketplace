@@ -90,6 +90,8 @@ export default function setting() {
   const [wallet, setWallet] = useState(address);
   const [isLoading, setIsLoading] = useState("");
 
+  const [isEmpty, setIsEmpty] = useState("");
+
   const connectEthereumWallet = async () => {
     try {
       const instance = await web3Modal.open();
@@ -132,6 +134,13 @@ export default function setting() {
         setEmail(formattedDetails.email);
         setWebsite(formattedDetails.website);
         setDetails(formattedDetails);
+        setWallet(address);
+
+        if (formattedDetails.name === "") {
+          setIsEmpty(true);
+        } else {
+          setIsEmpty(false);
+        }
       } catch (error) {
         console.error("Error Get Account Details: ", error);
       }
@@ -167,8 +176,36 @@ export default function setting() {
     }
   };
 
+  const updateAuthor = async (imageURI) => {
+    if (contract) {
+      try {
+        await contract.updateAccount(
+          name,
+          desc,
+          twitter,
+          facebook,
+          instagram,
+          imageURI,
+          email,
+          website,
+          true
+        );
+        contract.on("AccountUpdated", () => {
+          toast.success(`Author has been updated successfully`);
+          toast.success(`Redirect to your profile`);
+          setTimeout(() => {
+            router.push(`/profile/${address}`);
+          }, 3000);
+          setIsLoading(false);
+        });
+      } catch (error) {
+        toast.error("Error updating author, please try again");
+        setIsLoading(false);
+      }
+    }
+  };
+
   const uploadImage = async (file) => {
-    setIsLoading(true);
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
     const formData = new FormData();
     formData.append("file", file);
@@ -181,9 +218,15 @@ export default function setting() {
           pinata_secret_api_key: process.env.NEXT_PUBLIC_INFURA_SECRET,
         },
       });
-      setAsAuthor(
-        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
-      );
+      if (isEmpty) {
+        setAsAuthor(
+          `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
+        );
+      } else {
+        updateAuthor(
+          `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
+        );
+      }
     } catch (error) {
       toast.error("Error uploading file, please try again later");
       setIsLoading(false);
@@ -248,7 +291,35 @@ export default function setting() {
         toast.error("Please fill all the fields");
         return;
       } else {
+        setIsLoading(true);
         uploadImage(files[0]);
+      }
+    } else {
+      toast.error("Please connect your wallet first");
+    }
+  };
+
+  const handleSubmitUpdate = () => {
+    if (address) {
+      if (
+        name === "" ||
+        email === "" ||
+        desc === "" ||
+        website === "" ||
+        facebook === "" ||
+        twitter === "" ||
+        instagram === "" ||
+        wallet === ""
+      ) {
+        toast.error("Please fill all the fields");
+        return;
+      } else {
+        setIsLoading(true);
+        if (files.length === 0) {
+          updateAuthor(details.imageURI);
+        } else {
+          uploadImage(files[0]);
+        }
       }
     } else {
       toast.error("Please connect your wallet first");
@@ -308,10 +379,10 @@ export default function setting() {
           >
             <Image
               src={
-                details.imageURI
-                  ? details.imageURI
-                  : files.length > 0
+                files.length > 0
                   ? URL.createObjectURL(files[0])
+                  : details.imageURI
+                  ? details.imageURI
                   : Profile
               }
               alt="profile"
@@ -507,13 +578,23 @@ export default function setting() {
                 </div>
               </label>
             </div>
-            <button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="px-4 py-2 rounded-[20px] font-bold w-full bg-[#ECDFCC] text-[#181C14]"
-            >
-              {isLoading === true ? "Uploading..." : "Set as Author"}
-            </button>
+            {isEmpty ? (
+              <button
+                onClick={handleSubmit}
+                disabled={isLoading}
+                className="px-4 py-2 rounded-[20px] font-bold w-full bg-[#ECDFCC] text-[#181C14]"
+              >
+                {isLoading === true ? "Uploading..." : "Set as Author"}
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmitUpdate}
+                disabled={isLoading}
+                className="px-4 py-2 rounded-[20px] font-bold w-full bg-[#ECDFCC] text-[#181C14]"
+              >
+                {isLoading === true ? "Uploading..." : "Update Author"}
+              </button>
+            )}
           </div>
         </div>
       </div>

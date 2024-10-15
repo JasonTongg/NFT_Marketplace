@@ -26,6 +26,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector, useDispatch } from "react-redux";
+// import Web3 from web3;
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -245,37 +246,38 @@ export default function Default({ children }) {
 
   const connectContract = async () => {
     try {
-      if (isConnected && contract) {
-        getMarkeNft();
-        getMyNft(address);
-        dispatch(fetchMySellNft(contract));
-        getTopCreators();
-        followingAccounts(address);
-      }
-      if (isConnected && !contract) {
-        const signer = ethersProvider?.getSigner();
+      if (!contract) {
         const contract = new ethers.Contract(
           contractAddress,
           contractAbi,
-          await signer
+          new ethers.JsonRpcProvider(
+            "https://sepolia.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64"
+          )
         );
         const contractAcc = new ethers.Contract(
           accountContractAddress,
           accountContracAbi,
-          await signer
+          new ethers.JsonRpcProvider(
+            "https://sepolia.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64"
+          )
         );
         setContract(contract);
         setContractAcc(contractAcc);
       }
+      getMarkeNft();
+      getTopCreators();
+      if (isConnected) {
+        getMyNft(address);
+        dispatch(fetchMySellNft(contract));
+        followingAccounts(address);
+      }
     } catch (error) {
-      toast.error("Please Change to Sepolia Network");
+      toast.error("Something Wrong, please try again later..");
     }
   };
 
   useEffect(() => {
-    if (isConnected) {
-      connectContract();
-    }
+    connectContract();
     dispatch(setIsConnected(isConnected));
     dispatch(setAddress(address));
   }, [contract, isConnected]);
@@ -315,7 +317,7 @@ export default function Default({ children }) {
           </Box>
         </Modal>
         {children}
-        <Footer />
+        <Footer address={address} />
       </body>
     </html>
   );
