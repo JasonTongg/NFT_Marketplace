@@ -88,6 +88,7 @@ export default function index() {
   const [contractAcc, setContractAcc] = useState();
   const [follow, setFollow] = useState([false, false, false]);
   const [loading, setLoading] = useState([false, false, false]);
+  const SellNft = useSelector((state) => state.data.SellNft);
 
   const connectEthereumWallet = async () => {
     try {
@@ -191,6 +192,58 @@ export default function index() {
     await web3Modal.open();
   };
 
+  const [timers, setTimers] = useState([]);
+
+  // Function to generate a random time with at least 1 day
+  const generateRandomTime = () => {
+    const days = Math.floor(Math.random() * 3) + 1; // Random days between 1 and 3
+    const hours = Math.floor(Math.random() * 24); // Random hours between 0 and 23
+    const mins = Math.floor(Math.random() * 60); // Random minutes between 0 and 59
+    const secs = Math.floor(Math.random() * 60); // Random seconds between 0 and 59
+
+    return { days, hours, mins, secs };
+  };
+
+  // Function to update all timers every second
+  useEffect(() => {
+    // Initialize 12 random timers
+    setTimers(
+      Array.from({ length: SellNft?.length }, () => generateRandomTime())
+    );
+
+    const interval = setInterval(() => {
+      setTimers((prevTimers) =>
+        prevTimers.map((time) => {
+          let { days, hours, mins, secs } = time;
+
+          if (secs > 0) {
+            secs -= 1;
+          } else if (mins > 0) {
+            mins -= 1;
+            secs = 59;
+          } else if (hours > 0) {
+            hours -= 1;
+            mins = 59;
+            secs = 59;
+          } else if (days > 0) {
+            days -= 1;
+            hours = 23;
+            mins = 59;
+            secs = 59;
+          } else {
+            // Timer is up, keep it at zero
+            return { days: 0, hours: 0, mins: 0, secs: 0 };
+          }
+
+          return { days, hours, mins, secs };
+        })
+      );
+    }, 1000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, [SellNft]);
+
   return (
     <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-16">
       {/* <ToastContainer /> */}
@@ -202,7 +255,7 @@ export default function index() {
       />
       <Hero />
       <HowToBuy />
-      <HomeNftDetails />
+      <HomeNftDetails timers={timers} />
       <TopCreator
         followAccount={followAccount}
         unfollowAccount={unfollowAccount}
@@ -210,7 +263,7 @@ export default function index() {
         setFollow={setFollow}
         loading={loading}
       />
-      <FeaturedNft />
+      <FeaturedNft timers={timers} />
       <CategoryList />
       <NeverMiss />
     </div>

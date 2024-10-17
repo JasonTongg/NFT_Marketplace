@@ -69,13 +69,19 @@ export default function index() {
   const [price, setPrice] = useState(0);
 
   const SellNft = useSelector((state) => state.data.SellNft);
+  const MyNft = useSelector((state) => state.data.MyNft);
   const [nftList, setNftList] = useState([]);
   const router = useRouter();
   const id = router.query.id;
 
+  const [sellLoading, setSellLoading] = useState(false);
   useEffect(() => {
-    setNftList(SellNft.filter((nft) => nft.tokenId === id));
-  }, [SellNft]);
+    if (SellNft.some((nft) => nft.tokenId === id) === false) {
+      setNftList(MyNft.filter((nft) => nft.tokenId === id));
+    } else {
+      setNftList(SellNft.filter((nft) => nft.tokenId === id));
+    }
+  }, [SellNft, MyNft]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -145,22 +151,41 @@ export default function index() {
   //     }
   //   };
 
-  //   const transferToken = async () => {
-  //     if (contract) {
-  //       try {
-  //         const transfer = await contract.transfer(
-  //           inputAddress,
-  //           BigInt(+inputValue)
-  //         );
-  //         contract.on("Transfer", (from, to, value) => {
-  //           toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
-  //           getHolderData();
-  //         });
-  //       } catch (error) {
-  //         console.error("Error Transfer Token: ", error);
-  //       }
-  //     }
-  //   };
+  const resellNft = async () => {
+    // if (+price > +ethers.formatUnits(BigInt(nftList[0]?.price), "gwei")) {
+    if (contract) {
+      try {
+        setSellLoading(true);
+        const transaction = await contract.resellToken(
+          nftList[0]?.tokenId,
+          ethers.parseUnits(price.toString(), "gwei"),
+          {
+            value: ethers.parseEther("0.000025"),
+          }
+        );
+
+        const receipt = await transaction.wait();
+
+        // Check if the transaction was successful
+        if (receipt.status === 1) {
+          toast.success("You have successfully resell your NFT");
+          setSellLoading(false);
+        } else {
+          toast.error("Transaction failed");
+          toast.error("Please try again later...");
+          setSellLoading(false);
+        }
+      } catch (error) {
+        console.error("Error Transfer Token: ", error);
+        toast.error("Transaction failed");
+        toast.error("Please try again later...");
+        setSellLoading(false);
+      }
+    }
+    // } else {
+    //   toast.error("Price should be greater than current price");
+    // }
+  };
 
   const connectContract = async () => {
     try {
@@ -196,8 +221,7 @@ export default function index() {
   };
 
   return (
-    <div className="px-4 md:px-16 flex flex-col items-center justify-center gap-6">
-      {/* <ToastContainer /> */}
+    <div className="px-4 md:px-16 flex flex-col items-center justify-between gap-6 min-h-[calc(100vh-200px)]">
       <Navbar
         address={address}
         isConnected={isConnected}
@@ -206,7 +230,7 @@ export default function index() {
       />
       <div className="flex flex-col justify-center gap-6 items-center w-full mb-[3rem]">
         <h1 className="font-bold text-4xl md:text-5xl text-center">
-          💵 Resell your NFT and set price
+          💵 Sell your NFT and set price
         </h1>
         <div className="flex flex-col gap-2 justify-center w-[95%] md:w-[50vw]">
           <label htmlFor="username" className="font-bold text-xl">
@@ -237,9 +261,13 @@ export default function index() {
             height={700}
           />
         )}
-        <button className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]">
-          Resell NFT
+        <button
+          onClick={resellNft}
+          className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]"
+        >
+          {sellLoading ? "Selling..." : "Sell NFT"}
         </button>
+        <ToastContainer />
       </div>
     </div>
   );

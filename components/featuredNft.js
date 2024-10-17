@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { ethers } from "ethers";
 import Skeleton from "@mui/material/Skeleton";
 
-export default function featuredNft() {
+export default function featuredNft({ timers }) {
   const [category, setCategory] = useState("NFTs");
   const SellNft = useSelector((state) => state.data.SellNft);
   const [nftList, setNftList] = useState([]);
@@ -103,7 +103,20 @@ export default function featuredNft() {
                 </div>
                 <div className="absolute top-0 right-0 w-[190px] flex flex-col items-end justify-center bg-[#181C14] py-2 px-8 rounded-bl-[300px]">
                   <p className="text-sm">Remaining Time</p>
-                  <p className="text-xl font-bold">12h:19m:4s</p>
+                  <p className="text-xl font-bold">
+                    {timers[index]?.hours + timers[index]?.days * 24 < 10
+                      ? "0" + timers[index]?.hours + timers[index]?.days * 24
+                      : timers[index]?.hours + timers[index]?.days * 24}
+                    h:
+                    {timers[index]?.mins < 10
+                      ? "0" + timers[index]?.mins
+                      : timers[index]?.mins}
+                    m:
+                    {timers[index]?.secs < 10
+                      ? "0" + timers[index]?.secs
+                      : timers[index]?.secs}
+                    s
+                  </p>
                 </div>
                 <div className="absolute bottom-0 left-0 w-full sm:w-[350px] flex flex-col items-start justify-center bg-[#181C14] p-2 gap-2 rounded-tr-[300px]">
                   <p className="text-2xl font-bold">

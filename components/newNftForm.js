@@ -61,6 +61,10 @@ export default function newNftForm({
         },
       });
 
+      console.log(
+        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
+      );
+
       createNFT(
         `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`,
         ethers.parseUnits(price.toString(), "gwei").toString(),
@@ -104,14 +108,6 @@ export default function newNftForm({
       <p className="text-md sm:text-xl">
         you can set preferred dispay name, create your profile url and manage
         other personal settings
-      </p>
-      <div className="w-full h-[2px] bg-[#3C3D37]"></div>
-      <h2 className="text-3xl sm:text-4xl font-bold">
-        Image, Video, Audio, or 3D Model
-      </h2>
-      <p className="text-md sm:text-xl">
-        File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB,
-        GLTF. Max Size: 100MB.
       </p>
       <div className="w-full h-[2px] bg-[#3C3D37]"></div>
       <div

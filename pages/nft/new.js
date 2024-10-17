@@ -166,6 +166,7 @@ export default function index() {
         });
       } catch (error) {
         console.error("Error Transfer Token: ", error);
+        setIsLoading(false);
       }
     }
   };

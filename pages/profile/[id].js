@@ -127,7 +127,7 @@ export default function index() {
   }, [MyNft]);
 
   useEffect(() => {
-    setMySellNftList(MySellNft);
+    setMySellNftList(MySellNft.filter((item) => item.sold === false));
   }, [MySellNft]);
 
   const connectEthereumWallet = async () => {

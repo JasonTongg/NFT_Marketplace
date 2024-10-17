@@ -92,7 +92,7 @@ const style = {
 };
 
 export default function Default({ children }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [count, setCount] = useState(3); // Initial countdown value
@@ -281,6 +281,12 @@ export default function Default({ children }) {
     dispatch(setIsConnected(isConnected));
     dispatch(setAddress(address));
   }, [contract, isConnected]);
+
+  useEffect(() => {
+    if (window.location.pathname === "/") {
+      handleOpen();
+    }
+  }, []);
 
   return (
     <html lang="en">

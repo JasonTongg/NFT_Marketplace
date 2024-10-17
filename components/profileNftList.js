@@ -24,6 +24,7 @@ export default function profileNftList({
     if (active === 0) {
       setNftList(mySellNftList);
       setIsLoading(MySellNftLoading);
+      console.log(mySellNftList);
     } else if (active === 1) {
       setNftList(myNftList);
       setIsLoading(MyNftLoading);

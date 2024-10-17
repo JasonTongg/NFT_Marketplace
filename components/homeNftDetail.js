@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import Skeleton from "@mui/material/Skeleton";
 import { ethers } from "ethers";
 
-export default function HomeNftDetails() {
+export default function HomeNftDetails({ timers }) {
   const SellNft = useSelector((state) => state.data.SellNft);
   const [nftList, setNftList] = useState([]);
 
@@ -76,19 +76,35 @@ export default function HomeNftDetails() {
         </div>
         <div className="flex sm:justify-start justify-center items-center gap-6">
           <div className="flex flex-col items-center justify-center">
-            <p className="font-bold text-2xl">21</p>
+            <p className="font-bold text-2xl">
+              {timers[active]?.days < 10
+                ? "0" + timers[active]?.days
+                : timers[active]?.days}
+            </p>
             <p>Days</p>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <p className="font-bold text-2xl">10</p>
+            <p className="font-bold text-2xl">
+              {timers[active]?.hours < 10
+                ? "0" + timers[active]?.hours
+                : timers[active]?.hours}
+            </p>
             <p>Hours</p>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <p className="font-bold text-2xl">23</p>
+            <p className="font-bold text-2xl">
+              {timers[active]?.mins < 10
+                ? "0" + timers[active]?.mins
+                : timers[active]?.mins}
+            </p>
             <p>Mins</p>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <p className="font-bold text-2xl">11</p>
+            <p className="font-bold text-2xl">
+              {timers[active]?.secs < 10
+                ? "0" + timers[active]?.secs
+                : timers[active]?.secs}
+            </p>
             <p>Secs</p>
           </div>
         </div>
