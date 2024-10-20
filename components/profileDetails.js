@@ -37,6 +37,17 @@ export default function profileDetail({ details }) {
             "0x0000000000000000000000000000000000000000"}{" "}
           <LuCopy />
         </p>
+        <p>
+          Website:{" "}
+          {details.website ? (
+            <Link href={details.website} className="font-bold">
+              {details.website}
+            </Link>
+          ) : (
+            "Loading..."
+          )}
+        </p>
+        <p>Email: {details.email ? details.email : "Loading..."}</p>
         <p className="sm:text-start text-center">
           {details.description || "Loading..."}
         </p>

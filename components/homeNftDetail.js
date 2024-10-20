@@ -65,7 +65,7 @@ export default function HomeNftDetails({ timers }) {
           </div>
           <p>
             {nftList[active]?.price
-              ? ethers.formatUnits(BigInt(nftList[active]?.price), "gwei")
+              ? ethers.formatEther(BigInt(nftList[active]?.price))
               : "0"}{" "}
             SepoliaETH
           </p>

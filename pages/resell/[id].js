@@ -76,10 +76,20 @@ export default function index() {
 
   const [sellLoading, setSellLoading] = useState(false);
   useEffect(() => {
-    if (SellNft.some((nft) => nft.tokenId === id) === false) {
-      setNftList(MyNft.filter((nft) => nft.tokenId === id));
-    } else {
-      setNftList(SellNft.filter((nft) => nft.tokenId === id));
+    if (MyNft.some((nft) => nft.tokenId === id) === true) {
+      setNftList(
+        MyNft.filter(
+          (nft) =>
+            nft.tokenId === id && nft.owner === address && nft.sold === true
+        )
+      );
+    } else if (SellNft.some((nft) => nft.tokenId === id) === true) {
+      setNftList(
+        SellNft.filter(
+          (nft) =>
+            nft.tokenId === id && nft.owner === address && nft.sold === true
+        )
+      );
     }
   }, [SellNft, MyNft]);
 
@@ -229,21 +239,31 @@ export default function index() {
         openAddress={openModal}
       />
       <div className="flex flex-col justify-center gap-6 items-center w-full mb-[3rem]">
-        <h1 className="font-bold text-4xl md:text-5xl text-center">
-          💵 Sell your NFT and set price
-        </h1>
-        <div className="flex flex-col gap-2 justify-center w-[95%] md:w-[50vw]">
-          <label htmlFor="username" className="font-bold text-xl">
-            Price
-          </label>
-          <input
-            onChange={(e) => setPrice(e.target.value)}
-            type="number"
-            id="username"
-            placeholder="price"
-            className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
-          />
-        </div>
+        {nftList?.length > 0 ? (
+          <h1 className="font-bold text-4xl md:text-5xl text-center">
+            💵 Sell your NFT and set price
+          </h1>
+        ) : (
+          <h1 className="font-bold text-4xl md:text-5xl text-center">
+            NFT Not Found...
+          </h1>
+        )}
+        {nftList?.length > 0 ? (
+          <div className="flex flex-col gap-2 justify-center w-[95%] md:w-[50vw]">
+            <label htmlFor="username" className="font-bold text-xl">
+              Price
+            </label>
+            <input
+              onChange={(e) => setPrice(e.target.value)}
+              type="number"
+              id="username"
+              placeholder="price"
+              className="bg-transparent border-[2px] border-[#ECDFCC] rounded-[10px] placeholder:opacity-50 px-4 py-1 text-lg placeholder:text-[#ECDFCC]"
+            />
+          </div>
+        ) : (
+          ""
+        )}
         {nftList?.length > 0 ? (
           <Image
             src={nftList[0]?.imageURI}
@@ -261,12 +281,21 @@ export default function index() {
             height={700}
           />
         )}
-        <button
-          onClick={resellNft}
-          className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]"
-        >
-          {sellLoading ? "Selling..." : "Sell NFT"}
-        </button>
+        {nftList?.length > 0 ? (
+          <button
+            onClick={resellNft}
+            className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]"
+          >
+            {sellLoading ? "Selling..." : "Sell NFT"}
+          </button>
+        ) : (
+          <Link
+            href="/"
+            className="px-8 py-2 rounded-[20px] font-bold w-fit bg-[#ECDFCC] text-[#181C14]"
+          >
+            Back to Home Page
+          </Link>
+        )}
         <ToastContainer />
       </div>
     </div>

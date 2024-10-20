@@ -88,7 +88,7 @@ export default function featuredNft({ timers }) {
           Fashion
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
         {nftList?.length > 0
           ? nftList.map((item, index) => (
               <Link
@@ -118,15 +118,15 @@ export default function featuredNft({ timers }) {
                     s
                   </p>
                 </div>
-                <div className="absolute bottom-0 left-0 w-full sm:w-[350px] flex flex-col items-start justify-center bg-[#181C14] p-2 gap-2 rounded-tr-[300px]">
+                <div className="absolute bottom-0 left-0 w-full flex flex-col items-start justify-center bg-[#181C14] p-2 gap-2 rounded-tr-[300px]">
                   <p className="text-2xl font-bold">
                     {item.name} #{item.tokenId}
                   </p>
-                  <div className="border-[2px] border-[#3C3D37] rounded-[15px] p-3 flex items-center gap-2">
+                  <div className="border-[2px] w-[90%] border-[#3C3D37] rounded-[15px] p-3 flex items-center gap-2">
                     <div className="bg-[#3C3D37] py-2 px-4">Current Bid</div>
                     <p>
                       {item?.price
-                        ? ethers.formatUnits(BigInt(item?.price), "gwei")
+                        ? ethers.formatEther(BigInt(item?.price))
                         : "0"}{" "}
                       SepoliaETH
                     </p>

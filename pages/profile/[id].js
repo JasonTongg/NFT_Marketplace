@@ -102,6 +102,7 @@ export default function index() {
   const [contractAcc, setContractAcc] = useState();
   const MyNft = useSelector((state) => state.data.MyNft);
   const MySellNft = useSelector((state) => state.data.MySellNft);
+  const SellNft = useSelector((state) => state.data.SellNft);
   const MyNftLoading = useSelector((state) => state.data.MyNftLoading);
   const MySellNftLoading = useSelector((state) => state.data.MySellNftLoading);
   const [myNftList, setMyNftList] = useState([]);
@@ -127,8 +128,10 @@ export default function index() {
   }, [MyNft]);
 
   useEffect(() => {
-    setMySellNftList(MySellNft.filter((item) => item.sold === false));
-  }, [MySellNft]);
+    setMySellNftList(
+      SellNft.filter((item) => item.sold === false && item.seller === address)
+    );
+  }, [SellNft]);
 
   const connectEthereumWallet = async () => {
     try {
@@ -215,6 +218,7 @@ export default function index() {
           isAuthor: details.isAuthor,
         };
         setDetails(formattedDetails);
+        console.log("Details: ", formattedDetails);
         if (formattedDetails.name === "" || formattedDetails.name === null) {
           if (id === address) {
             handleOpen();

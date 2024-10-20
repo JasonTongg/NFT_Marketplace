@@ -67,7 +67,7 @@ export default function newNftForm({
 
       createNFT(
         `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`,
-        ethers.parseUnits(price.toString(), "gwei").toString(),
+        ethers.parseEther(price.toString()).toString(),
         name,
         desc,
         collection

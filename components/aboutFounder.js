@@ -1,5 +1,5 @@
 import React from "react";
-import ElonMusk from "../public/Elon_Musk_Royal_Society.webp";
+import ElonMusk from "../public/founder.jpg";
 import Image from "next/image";
 
 export default function aboutFounder() {

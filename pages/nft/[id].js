@@ -170,6 +170,7 @@ export default function index() {
   const buyNft = async (Id) => {
     if (contract) {
       try {
+        console.log(nftList[0]?.price);
         setBuyLoading(true);
         const transaction = await contract.createMarketSale(Id, {
           value: nftList[0]?.price,
@@ -588,7 +589,7 @@ export default function index() {
             </div>
             <p>
               {nftList?.length > 0
-                ? ethers.formatUnits(BigInt(nftList[0]?.price), "gwei")
+                ? ethers.formatEther(BigInt(nftList[0]?.price))
                 : 0}{" "}
               SepoliaETH
             </p>

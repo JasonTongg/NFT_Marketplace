@@ -1,4 +1,4 @@
-import "../app/globals.css";
+import "../styles/globals.css";
 import Layout from "../layout/default";
 import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
