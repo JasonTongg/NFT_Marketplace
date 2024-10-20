@@ -6,19 +6,15 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import Navbar from "../../components/navbar";
-import Image from "next/image";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import Nft1 from "../../public/NFT1.png";
 import { FaRegHeart } from "react-icons/fa6";
 import Profile from "../../public/profile.svg";
 import { LuTimer } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import debounce from "lodash/debounce";
-import { useRouter } from "next/router";
 import { Skeleton } from "@mui/material";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
@@ -30,14 +26,6 @@ const sepolia = {
   explorerUrl: "https://sepolia.etherscan.io",
   rpcUrl: "https://sepolia.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
 };
-
-// const mainnet = {
-//   chainId: 1,
-//   name: "Ethereum",
-//   currency: "ETH",
-//   explorerUrl: "https://etherscan.io",
-//   rpcUrl: "https://mainnet.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
-// };
 
 const metadata = {
   name: "Tweet App",
@@ -70,7 +58,6 @@ export default function index() {
     useEthereumWallet();
   const { contractAddress, contractAbi } = useSelector((state) => state.data);
 
-  const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
 
   const [search, setSearch] = useState("");
@@ -102,82 +89,8 @@ export default function index() {
     }
   };
 
-  // const getTransaction = async () => {
-  //   console.log("Getting Contract");
-  //   if (contract) {
-  //     console.log("There is contract");
-  //     try {
-  //       console.log("Start getting contract");
-  //       const transactions = await contract.getTransactions();
-  //       const formattedTransactions = transactions.map((tx) => ({
-  //         from: tx.from,
-  //         to: tx.to,
-  //         amount: tx.amount.toString(), // Convert BigNumber to string (or .toNumber() if small)
-  //         message: tx.message,
-  //       }));
-
-  //       console.log("set Transaction");
-  //       setTransactions(formattedTransactions);
-  //       console.log("set Transaction done");
-  //     } catch (error) {
-  //       console.error("Error Get Transaction: ", error);
-  //     }
-  //   }
-  // };
-
-  //   const getHolderData = async () => {
-  //     if (contract) {
-  //       try {
-  //         const allTokenHolder = await contract.getTokenHolder();
-  //         let tempHolderArray = []; // Temporary array to store data
-
-  //         await Promise.all(
-  //           allTokenHolder.map(async (item) => {
-  //             const singleHolderData = await contract.getTokenHolderData(item);
-  //             const formattedData = {
-  //               _tokenId: singleHolderData[0],
-  //               _to: singleHolderData[1],
-  //               _from: singleHolderData[2],
-  //               _totalToken: singleHolderData[3],
-  //               _tokenHolder: singleHolderData[4],
-  //             };
-  //             tempHolderArray.push(formattedData);
-  //           })
-  //         );
-
-  //         setHolderArray(tempHolderArray); // Set state once after loop
-  //       } catch (error) {
-  //         console.error("Error Get Transaction Count: ", error);
-  //       }
-  //     }
-  //   };
-
-  //   const transferToken = async () => {
-  //     if (contract) {
-  //       try {
-  //         const transfer = await contract.transfer(
-  //           inputAddress,
-  //           BigInt(+inputValue)
-  //         );
-  //         contract.on("Transfer", (from, to, value) => {
-  //           toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
-  //           getHolderData();
-  //         });
-  //       } catch (error) {
-  //         console.error("Error Transfer Token: ", error);
-  //       }
-  //     }
-  //   };
-
   const connectContract = async () => {
     try {
-      if (isConnected && contract) {
-        // getHolderData();
-        // console.log("Address: " + address);
-        // const allTokenHolder = await contract.balanceOf(address);
-        // setAccountBalance(Number(allTokenHolder));
-        // console.log("account balance: " + Number(allTokenHolder));
-      }
       if (isConnected && !contract) {
         const signer = ethersProvider?.getSigner();
         const contract = new ethers.Contract(
@@ -213,9 +126,6 @@ export default function index() {
   useEffect(() => {
     debouncedHandleSearch();
   }, [search, category]);
-
-  // Debounce the handleSearch function
-  // const debouncedHandleSearch = useCallback(debounce(handleSearch, 300), []);
 
   useEffect(() => {
     if (isConnected) {

@@ -9,7 +9,6 @@ import Navbar from "../../components/navbar";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import Profile from "../../public/profile.svg";
 import { MdOutlineMail } from "react-icons/md";
@@ -31,14 +30,6 @@ const sepolia = {
   explorerUrl: "https://sepolia.etherscan.io",
   rpcUrl: "https://sepolia.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
 };
-
-// const mainnet = {
-//   chainId: 1,
-//   name: "Ethereum",
-//   currency: "ETH",
-//   explorerUrl: "https://etherscan.io",
-//   rpcUrl: "https://mainnet.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
-// };
 
 const metadata = {
   name: "Tweet App",
@@ -75,7 +66,6 @@ export default function setting() {
 
   const router = useRouter();
 
-  const [balance, setBalance] = useState(0);
   const [contract, setContract] = useState();
   const [files, setFiles] = useState([]);
   const [details, setDetails] = useState({});

@@ -61,10 +61,6 @@ export default function newNftForm({
         },
       });
 
-      console.log(
-        `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`
-      );
-
       createNFT(
         `https://maroon-obliged-antelope-666.mypinata.cloud/ipfs/${response.data.IpfsHash}?pinataGatewayToken=${process.env.NEXT_PUBLIC_GATEWAY_KEY}`,
         ethers.parseEther(price.toString()).toString(),

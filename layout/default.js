@@ -221,12 +221,7 @@ export default function Default({ children }) {
         dispatch(setFollowingAccountLoading(true));
         let index = 0;
         while (true) {
-          console.log("index: " + index);
           const following = await contractAcc.followingAccounts(address, index);
-          console.log(following.name);
-          if (!following || following.name === "") {
-            console.log("done");
-          }
           const formattedList = {
             accountAddress: following.accountAddress,
             imageURI: following.imageURI,
